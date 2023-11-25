@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
 import ErrorMessage from "./ErrorMessage"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import SubmitButton from "./SubmitButton";
+import api from "../utils/api";
 
 const registrationSchema = yup.object({
     login: yup
@@ -25,7 +26,37 @@ const registrationSchema = yup.object({
         .oneOf([yup.ref('password')], `Passwords must match`)
 })
 
-export default function RegisterForm() {
+export default function RegisterForm({ onSuccess }) {
+    const [errMsg, setErrMsg] = useState(``)
+
+    const handleRegister = async (values) => {
+        try {
+            const res = await api.post(api.routes.register, values)
+
+            onSuccess()
+        } catch (err) {
+            if (err.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                setErrMsg(err.response.data.message)
+                // console.log(err.response.data);
+                // console.log(err.response.status);
+                // console.log(err.response.headers);
+            } else if (err.request) {
+                // The request was made but no response was received
+                // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                setErrMsg(`Server didn't respond`)
+                // console.log(err.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                setErrMsg(`Internal server error`)
+                // console.log('Error', err.message);
+            }
+            // console.log(err.config);
+        }
+    }
+
     return (
         <Formik
             initialValues={{
@@ -35,10 +66,11 @@ export default function RegisterForm() {
                 repeatPassword: ``
             }}
             validationSchema={registrationSchema}
-            onSubmit={values => {
-            alert(JSON.stringify(values, null, 2))}}
+            onSubmit={handleRegister}
         >
             <Form>
+                <p>{errMsg}</p>
+
                 <label htmlFor="login">Login:</label>
                 <Field name="login" type="text" autoComplete="off"/>
                 <ErrorMessage name="login"/>
