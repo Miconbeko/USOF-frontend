@@ -10,6 +10,6 @@ import LoginForm from "./components/LoginForm";
 const root = createRoot(document.getElementById("root"));
 root.render(
     <StrictMode>
-        <RegisterForm />
+        <App />
     </StrictMode>
 );

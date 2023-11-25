@@ -5,6 +5,7 @@ import ErrorMessage from "./ErrorMessage"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import SubmitButton from "./SubmitButton";
 import api from "../utils/api";
+import {Link} from "react-router-dom";
 
 const registrationSchema = yup.object({
     login: yup
@@ -33,6 +34,10 @@ export default function RegisterForm({ onSuccess }) {
         try {
             const res = await api.post(api.routes.register, values)
 
+            // TODO: To login form
+            // window.localStorage.setItem(`token`, res.data.token)
+            // console.log(window.localStorage.getItem(`token`))
+
             onSuccess()
         } catch (err) {
             if (err.response) {
@@ -58,41 +63,44 @@ export default function RegisterForm({ onSuccess }) {
     }
 
     return (
-        <Formik
-            initialValues={{
-                login: ``,
-                email: ``,
-                password: ``,
-                repeatPassword: ``
-            }}
-            validationSchema={registrationSchema}
-            onSubmit={handleRegister}
-        >
-            <Form>
-                <p>{errMsg}</p>
+        <>
+            <Formik
+                initialValues={{
+                    login: ``,
+                    email: ``,
+                    password: ``,
+                    repeatPassword: ``
+                }}
+                validationSchema={registrationSchema}
+                onSubmit={handleRegister}
+            >
+                <Form>
+                    <p>{errMsg}</p>
 
-                <label htmlFor="login">Login:</label>
-                <Field name="login" type="text" autoComplete="off"/>
-                <ErrorMessage name="login"/>
-                <br/>
+                    <label htmlFor="login">Login:</label>
+                    <Field name="login" type="text" autoComplete="off"/>
+                    <ErrorMessage name="login"/>
+                    <br/>
 
-                <label htmlFor="email">Email:</label>
-                <Field name="email" type="text"/>
-                <ErrorMessage name="email"/>
-                <br/>
+                    <label htmlFor="email">Email:</label>
+                    <Field name="email" type="text"/>
+                    <ErrorMessage name="email"/>
+                    <br/>
 
-                <label htmlFor="password">Password:</label>
-                <Field name="password" type="password" autoComplete="off"/>
-                <ErrorMessage name="password"/>
-                <br/>
+                    <label htmlFor="password">Password:</label>
+                    <Field name="password" type="password" autoComplete="off"/>
+                    <ErrorMessage name="password"/>
+                    <br/>
 
-                <label htmlFor="repeatPassword">Password:</label>
-                <Field name="repeatPassword" type="password" autoComplete="off"/>
-                <ErrorMessage name="repeatPassword"/>
-                <br/>
+                    <label htmlFor="repeatPassword">Password:</label>
+                    <Field name="repeatPassword" type="password" autoComplete="off"/>
+                    <ErrorMessage name="repeatPassword"/>
+                    <br/>
 
-                <SubmitButton value="Register"/>
-            </Form>
-        </Formik>
+                    <SubmitButton value="Register"/>
+                </Form>
+            </Formik>
+            <Link to={`/login`}>Already have an account</Link>
+        </>
     )
 }
