@@ -5,7 +5,7 @@ import ErrorMessage from "./ErrorMessage"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import SubmitButton from "./SubmitButton";
 
-const validationSchema = yup.object({
+const registrationSchema = yup.object({
     login: yup
         .string()
         .trim()
@@ -34,7 +34,7 @@ export default function RegisterForm() {
                 password: ``,
                 repeatPassword: ``
             }}
-            validationSchema={validationSchema}
+            validationSchema={registrationSchema}
             onSubmit={values => {
             alert(JSON.stringify(values, null, 2))}}
         >
