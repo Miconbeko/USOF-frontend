@@ -27,18 +27,15 @@ const registrationSchema = yup.object({
         .oneOf([yup.ref('password')], `Passwords must match`)
 })
 
-export default function RegisterForm({ onSuccess }) {
+export default function RegisterForm() {
     const [errMsg, setErrMsg] = useState(``)
+    const [success, setSuccess] = useState(false)
 
     const handleRegister = async (values) => {
         try {
             const res = await api.post(api.routes.register, values)
 
-            // TODO: To login form
-            // window.localStorage.setItem(`token`, res.data.token)
-            // console.log(window.localStorage.getItem(`token`))
-
-            onSuccess()
+            setSuccess(true)
         } catch (err) {
             if (err.response) {
                 // The request was made and the server responded with a status code
@@ -62,8 +59,13 @@ export default function RegisterForm({ onSuccess }) {
         }
     }
 
-    return (
-        <>
+    const successMessage =
+        <div>
+            <p>Congratulations ! You account is registered. We sent you a confirmation link. Click on it and login in your brand new accout </p>
+        </div>
+
+    const form =
+        <div>
             <Formik
                 initialValues={{
                     login: ``,
@@ -101,6 +103,11 @@ export default function RegisterForm({ onSuccess }) {
                 </Form>
             </Formik>
             <Link to={`/login`}>Already have an account</Link>
+        </div>
+
+    return (
+        <>
+            { success ? successMessage : form}
         </>
     )
 }
