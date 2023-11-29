@@ -5,6 +5,8 @@ import ErrorMessage from "./ErrorMessage";
 import SubmitButton from "./SubmitButton";
 import {Link} from "react-router-dom";
 import api from "../utils/api";
+import { useSelector, useDispatch } from "react-redux"
+import {increment, decrement, setCount} from "../store/slices/counterSlice";
 
 const loginSchema = yup.object({
     login: yup
@@ -19,6 +21,8 @@ const loginSchema = yup.object({
 
 export default function LoginForm() {
     const [errMsg, setErrMsg] = useState(``)
+    const count = useSelector(state => state.counter.count)
+    const dispatch = useDispatch()
 
     const handleLogin = async (values) => {
         try {
@@ -50,6 +54,12 @@ export default function LoginForm() {
 
     return (
         <>
+            <section>
+                <h2>{count}</h2>
+                <button onClick={() => dispatch(increment())}>+</button>
+                <button onClick={() => dispatch(decrement())}>-</button>
+                <button onClick={() => dispatch(setCount(5))}>=5</button>
+            </section>
             <Formik
                 initialValues={{
                     login: ``,

@@ -1,8 +1,6 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
-import Header from "./Header";
-import Footer from "./Footer";
 import Main from "../pages/Main";
 import Layout from "./Layout";
 import Missing from "../pages/Missing";
