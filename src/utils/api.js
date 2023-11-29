@@ -8,7 +8,8 @@ const api = axios.create({
 
 api.routes = {
     register: `/auth/register`,
-    login: `/auth/login`
+    login: `/auth/login`,
+    allPosts: `/posts`
 }
 
 export default api

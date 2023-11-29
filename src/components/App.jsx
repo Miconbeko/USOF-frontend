@@ -4,21 +4,21 @@ import LoginForm from "./LoginForm";
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "../pages/Main";
+import Layout from "./Layout";
+import Missing from "../pages/Missing";
 
 export default function App() {
     return (
         <BrowserRouter>
-            <div className="h-screen">
-                <Header />
-                <main>
-                    <Routes>
-                        <Route path={`/`} element={<Main/>}/>
-                        <Route path={`/login`} element={<LoginForm/>}/>
-                        <Route path={`/register`} element={<RegisterForm/>}/>
-                    </Routes>
-                </main>
-                <Footer />
-            </div>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={<Main/>}/>
+                    <Route path="/login" element={<LoginForm/>}/>
+                    <Route path="/register" element={<RegisterForm/>}/>
+
+                    <Route path="*" element={<Missing/>}/>
+                </Route>
+            </Routes>
         </BrowserRouter>
     )
 }
