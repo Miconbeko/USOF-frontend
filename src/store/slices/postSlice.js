@@ -14,9 +14,7 @@ const initialState = {
 
 export const fetchPost = createAsyncThunk(`post/fetchPost`, async (params) => {
 	try {
-		const res = await api.get(
-			api.routes.postById.replace(`:id`, params.id),
-		);
+		const res = await api.get(api.routes.postById(params.id));
 
 		return res.data;
 	} catch (err) {
@@ -25,6 +23,21 @@ export const fetchPost = createAsyncThunk(`post/fetchPost`, async (params) => {
 		});
 	}
 });
+
+export const fetchComments = createAsyncThunk(
+	`post/fetchComments`,
+	async (params) => {
+		try {
+			const res = await api.get(api.routes.commentsToPost(params.id));
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, (msg) => {
+				throw new Error(msg);
+			});
+		}
+	},
+);
 
 export const postSlice = createSlice({
 	name: `post`,
@@ -41,7 +54,18 @@ export const postSlice = createSlice({
 			.addCase(fetchPost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
-				console.log(action);
+			})
+
+			.addCase(fetchComments.pending, (state, action) => {
+				state.status = `loading`;
+			})
+			.addCase(fetchComments.fulfilled, (state, action) => {
+				state.status = `success`;
+				state.post.comments = action.payload.comments;
+			})
+			.addCase(fetchComments.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
 			});
 	},
 });

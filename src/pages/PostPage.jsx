@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+	fetchComments,
 	fetchPost,
 	getError,
 	getStatus,
@@ -17,8 +18,9 @@ export default function PostPage() {
 	const postError = useSelector(getError);
 
 	useEffect(() => {
-		if (post.id != id || postStatus === `idle`) {
+		if (postStatus === `idle`) {
 			dispatch(fetchPost({ id }));
+			dispatch(fetchComments({ id }));
 		}
 	}, []);
 
@@ -30,6 +32,18 @@ export default function PostPage() {
 			<div>
 				<Link>{post.author.login}</Link>
 				<p>Rating: {post.author.rating}</p>
+			</div>
+			<br />
+			<div>
+				<h3>Answers:</h3>
+				{post.comments.map((comment) => (
+					<>
+						<p key={comment.id}>
+							{comment.content}{" "}
+							<Link>{comment.author.login}</Link>
+						</p>
+					</>
+				))}
 			</div>
 		</>
 	);
