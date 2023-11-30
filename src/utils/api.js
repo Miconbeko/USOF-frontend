@@ -12,6 +12,7 @@ api.routes = {
 	allPosts: `/posts`,
 	postById: (id) => `/posts/${id}`,
 	commentsToPost: (id) => `/posts/${id}/comments`,
+	userByLogin: (login) => `/users/${login}`,
 };
 
 api.catcher = (err, fn = console.error) => {

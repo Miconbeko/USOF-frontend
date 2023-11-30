@@ -18,10 +18,10 @@ export default function PostPage() {
 	const postError = useSelector(getError);
 
 	useEffect(() => {
-		if (postStatus === `idle`) {
-			dispatch(fetchPost({ id }));
-			dispatch(fetchComments({ id }));
-		}
+		// if (postStatus === `idle`) {
+		dispatch(fetchPost({ id }));
+		dispatch(fetchComments({ id }));
+		// }
 	}, []);
 
 	return (
@@ -30,19 +30,22 @@ export default function PostPage() {
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
 			<div>
-				<Link>{post.author.login}</Link>
+				<Link to={`/user/${post.author.login}`}>
+					{post.author.login}
+				</Link>
 				<p>Rating: {post.author.rating}</p>
 			</div>
 			<br />
 			<div>
 				<h3>Answers:</h3>
-				{post.comments.map((comment) => (
-					<>
-						<p key={comment.id}>
-							{comment.content}{" "}
-							<Link>{comment.author.login}</Link>
-						</p>
-					</>
+				{post?.comments?.map((comment) => (
+					<p key={comment.id}>
+						{comment.content}
+						<Link to={`/user/${comment.author.login}`}>
+							{" "}
+							{comment.author.login}
+						</Link>
+					</p>
 				))}
 			</div>
 		</>

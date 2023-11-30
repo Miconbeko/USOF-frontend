@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import Missing from "../pages/Missing";
 import CreatePostForm from "./CreatePostForm";
 import PostPage from "../pages/PostPage";
+import UserPage from "../pages/UserPage";
 
 export default function App() {
 	return (
@@ -17,6 +18,7 @@ export default function App() {
 					<Route path="/register" element={<RegisterForm />} />
 					<Route path="/createPost" element={<CreatePostForm />} />
 					<Route path="/post/:id" element={<PostPage />} />
+					<Route path="/user/:login" element={<UserPage />} />
 
 					<Route path="*" element={<Missing />} />
 				</Route>
