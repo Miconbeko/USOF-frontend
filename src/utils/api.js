@@ -10,6 +10,7 @@ api.routes = {
 	register: `/auth/register`,
 	login: `/auth/login`,
 	allPosts: `/posts`,
+	postById: `/posts/:id`,
 };
 
 api.catcher = (err, fn = console.error) => {
