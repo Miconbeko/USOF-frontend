@@ -4,18 +4,15 @@ import Post from "./Post";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllPosts } from "../store/slices/postsSlice";
 import { nanoid } from "@reduxjs/toolkit";
+import Loading from "./Loading";
 
 export default function Feed() {
-	// const posts = useSelector(selectAllPosts);
-	// const dispatch = useDispatch();
-
 	const [posts, setPosts] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				setLoading(true);
 				const res = await api.get(api.routes.allPosts);
 
 				setPosts(res.data.posts);
@@ -32,7 +29,7 @@ export default function Feed() {
 		<>
 			Feed <br />
 			{(() => {
-				if (loading) return <div>Loading</div>;
+				if (loading) return <Loading />;
 				if (posts && posts.length)
 					return posts.map((post) => (
 						<Post key={post.id} post={post} />

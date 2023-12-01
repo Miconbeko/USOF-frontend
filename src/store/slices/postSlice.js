@@ -39,6 +39,14 @@ export const fetchComments = createAsyncThunk(
 	},
 );
 
+export const fetchPostAndComments = createAsyncThunk(
+	`post/fetchPostAndComments`,
+	async (params, { dispatch }) => {
+		dispatch(fetchPost(params));
+		dispatch(fetchComments(params));
+	},
+);
+
 export const postSlice = createSlice({
 	name: `post`,
 	initialState,
