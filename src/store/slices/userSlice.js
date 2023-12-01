@@ -29,6 +29,11 @@ export const userSlice = createSlice({
 			})
 			.addCase(fetchUser.fulfilled, (state, action) => {
 				state.status = `succeeded`;
+
+				action.payload.user.avatar =
+					api.defaults.baseURL.slice(0, -3) +
+					action.payload.user.avatar.slice(7);
+
 				state.user = action.payload.user;
 			})
 			.addCase(fetchUser.rejected, (state, action) => {

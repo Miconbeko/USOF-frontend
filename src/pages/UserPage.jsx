@@ -25,6 +25,12 @@ export default function UserPage() {
 	return (
 		<>
 			<p>{userError}</p>
+			<p>{user.avatar}</p>
+			<img
+				className="w-32 h-32 rounded"
+				src={user.avatar}
+				alt="User avatar"
+			/>
 			<h2>{user.login}</h2>
 			<p>Full name: {user.fullName}</p>
 			<p>Rating: {user.rating}</p>
