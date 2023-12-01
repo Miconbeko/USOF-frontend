@@ -6,26 +6,26 @@ import {
 	getStatus,
 	fetchUser,
 } from "../store/slices/userSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
 
 export default function UserPage() {
 	const { login } = useParams();
 	const dispatch = useDispatch();
+
+	const [loading, setLoading] = useState(true);
 
 	const user = useSelector(selectUser);
 	const userStatus = useSelector(getStatus);
 	const userError = useSelector(getError);
 
 	useEffect(() => {
-		if (userStatus === `idle`) {
-			dispatch(fetchUser({ login }));
-		}
+		dispatch(fetchUser({ login }));
+		setLoading(false);
 	}, []);
 
-	return (
+	const loadedUserPage = (
 		<>
-			<p>{userError}</p>
-			<p>{user.avatar}</p>
 			<img
 				className="w-32 h-32 rounded"
 				src={user.avatar}
@@ -35,6 +35,16 @@ export default function UserPage() {
 			<p>Full name: {user.fullName}</p>
 			<p>Rating: {user.rating}</p>
 			<p>Role: {user.role}</p>
+		</>
+	);
+
+	return (
+		<>
+			{(() => {
+				if (loading) return <Loading />;
+				if (!userError) return loadedUserPage;
+				return <p>User not found</p>;
+			})()}
 		</>
 	);
 }
