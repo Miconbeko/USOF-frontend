@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
 import ErrorMessage from "./ErrorMessage";
@@ -30,6 +30,7 @@ const registrationSchema = yup.object({
 export default function RegisterForm() {
 	const [errMsg, setErrMsg] = useState(``);
 	const [success, setSuccess] = useState(false);
+	const inputRef = useRef(null);
 
 	const handleRegister = async (values) => {
 		try {
@@ -51,6 +52,12 @@ export default function RegisterForm() {
 		</div>
 	);
 
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [inputRef]);
+
 	const form = (
 		<div>
 			<Formik
@@ -67,7 +74,12 @@ export default function RegisterForm() {
 					<p>{errMsg}</p>
 
 					<label htmlFor="login">Login:</label>
-					<Field name="login" type="text" autoComplete="off" />
+					<Field
+						name="login"
+						type="text"
+						autoComplete="off"
+						innerRef={inputRef}
+					/>
 					<ErrorMessage name="login" />
 					<br />
 

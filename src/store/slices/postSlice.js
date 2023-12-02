@@ -14,9 +14,19 @@ const initialState = {
 
 export const fetchPost = createAsyncThunk(`post/fetchPost`, async (params) => {
 	try {
-		const res = await api.get(api.routes.postById(params.id));
+		const postResponse = await api.get(api.routes.postById(params.id));
 
-		return res.data;
+		try {
+			const userResponse = await api.get(
+				api.routes.userById(postResponse.data.post.userId),
+			);
+
+			postResponse.data.post.author = userResponse.data.user;
+		} catch (err) {
+			console.error(err);
+		}
+
+		return postResponse.data;
 	} catch (err) {
 		api.catcher(err, (msg) => {
 			throw new Error(msg);
@@ -30,6 +40,7 @@ export const fetchComments = createAsyncThunk(
 		try {
 			const res = await api.get(api.routes.commentsToPost(params.id));
 
+			// console.log(res.data);
 			return res.data;
 		} catch (err) {
 			api.catcher(err, (msg) => {
@@ -53,11 +64,15 @@ export const postSlice = createSlice({
 	extraReducers(builder) {
 		builder
 			.addCase(fetchPost.pending, (state, action) => {
+				state.error = null;
 				state.status = `loading`;
 			})
 			.addCase(fetchPost.fulfilled, (state, action) => {
+				const comments = state.post.comments;
+
 				state.status = `success`;
 				state.post = action.payload.post;
+				state.post.comments = comments;
 			})
 			.addCase(fetchPost.rejected, (state, action) => {
 				state.status = `failed`;
@@ -65,6 +80,7 @@ export const postSlice = createSlice({
 			})
 
 			.addCase(fetchComments.pending, (state, action) => {
+				state.error = null;
 				state.status = `loading`;
 			})
 			.addCase(fetchComments.fulfilled, (state, action) => {

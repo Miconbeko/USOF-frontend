@@ -15,7 +15,32 @@ export default function Feed() {
 			try {
 				const res = await api.get(api.routes.allPosts);
 
-				setPosts(res.data.posts);
+				const posts = res.data.posts;
+				const uniqueUsersId = [
+					...new Set(
+						posts.map((post) => post.userId).filter((id) => id),
+					),
+				];
+
+				try {
+					const res = await api.get(api.routes.usersByIds, {
+						params: {
+							ids: uniqueUsersId.join(`,`),
+						},
+					});
+
+					const users = res.data.users;
+
+					for (const post of posts) {
+						post.author = users.find(
+							(user) => post.userId === user.id,
+						);
+					}
+				} catch (err) {
+					console.error(err);
+				}
+
+				setPosts(posts);
 			} catch (err) {
 				api.catcher(err);
 			}

@@ -10,6 +10,7 @@ import {
 } from "../store/slices/postSlice";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import UserMinify from "../components/UserMinify";
 
 export default function PostPage() {
 	const { id } = useParams();
@@ -30,23 +31,16 @@ export default function PostPage() {
 		<>
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
-			<div>
-				<Link to={`/user/${post.author.login}`}>
-					{post.author.login}
-				</Link>
-				<p>Rating: {post.author.rating}</p>
-			</div>
+			<UserMinify user={post.author} />
 			<br />
 			<div>
 				<h3>Answers:</h3>
 				{post?.comments?.map((comment) => (
-					<p key={comment.id}>
-						{comment.content}
-						<Link to={`/user/${comment.author.login}`}>
-							{" "}
-							{comment.author.login}
-						</Link>
-					</p>
+					<div key={comment.id}>
+						<p>{comment.content}</p>
+						<UserMinify user={comment.author} />
+						<br />
+					</div>
 				))}
 			</div>
 		</>

@@ -19,7 +19,8 @@ export default function App() {
 					<Route path="/createPost" element={<CreatePostForm />} />
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
-
+					<Route path="/unknownUser" element={<Missing />} /> //TODO:
+					make another page for unknown user
 					<Route path="*" element={<Missing />} />
 				</Route>
 			</Routes>

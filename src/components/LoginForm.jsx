@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import ErrorMessage from "./ErrorMessage";
@@ -15,6 +15,8 @@ const loginSchema = yup.object({
 
 export default function LoginForm() {
 	const [errMsg, setErrMsg] = useState(``);
+	const inputRef = useRef(null);
+
 	const count = useSelector((state) => state.counter.count);
 	const dispatch = useDispatch();
 
@@ -27,6 +29,12 @@ export default function LoginForm() {
 			api.catcher(err, setErrMsg);
 		}
 	};
+
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [inputRef]);
 
 	return (
 		<>
@@ -48,7 +56,7 @@ export default function LoginForm() {
 					<p>{errMsg}</p>
 
 					<label htmlFor="login">Login:</label>
-					<Field name="login" type="text" />
+					<Field name="login" type="text" innerRef={inputRef} />
 					<ErrorMessage name="login" marked={false} />
 					<br />
 
