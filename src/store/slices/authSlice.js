@@ -26,13 +26,29 @@ export const fetchAuth = createAsyncThunk(
 	},
 );
 
-export const fetchAuthLocal = createAsyncThunk(`auth/localLogin`, async () => {
-	const token = window.localStorage.getItem(`token`);
+export const fetchAuthLocal = createAsyncThunk(
+	`auth/localLogin`,
+	async (params, { dispatch }) => {
+		const token = window.localStorage.getItem(`token`);
 
-	if (token) return token;
+		if (token) return token;
 
-	throw new Error(`Not login`);
-});
+		throw new Error(`Not login`);
+	},
+);
+
+export const getUserCheckToken = createAsyncThunk(
+	`auth/getUserCheckToken`,
+	async () => {
+		try {
+			const res = await api.get(api.routes.userByToken);
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, api.errorHandlers.rethrow);
+		}
+	},
+);
 
 export const authSlice = createSlice({
 	name: `auth`,
@@ -45,7 +61,7 @@ export const authSlice = createSlice({
 			})
 			.addCase(fetchAuth.fulfilled, (state, action) => {
 				state.status = `succeeded`;
-				state.auth = action.payload.token;
+				state.auth = action.payload;
 				window.localStorage.setItem(`token`, action.payload.token);
 			})
 			.addCase(fetchAuth.rejected, (state, action) => {
@@ -56,11 +72,26 @@ export const authSlice = createSlice({
 
 			.addCase(fetchAuthLocal.fulfilled, (state, action) => {
 				state.status = `succeeded`;
-				state.auth = action.payload;
+				state.auth.token = action.payload;
 			})
 			.addCase(fetchAuthLocal.rejected, (state, action) => {
 				state.status = `idle`;
 				state.error = null;
+			})
+
+			.addCase(getUserCheckToken.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(getUserCheckToken.fulfilled, (state, action) => {
+				state.status = `succeeded`;
+				state.auth.user = action.payload.user;
+			})
+			.addCase(getUserCheckToken.rejected, (state, action) => {
+				state.status = `idle`;
+				state.error = null;
+				state.auth = {};
+				window.localStorage.removeItem(`token`);
 			});
 	},
 });

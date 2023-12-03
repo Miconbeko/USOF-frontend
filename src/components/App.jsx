@@ -13,6 +13,7 @@ import {
 	fetchAuthLocal,
 	getError,
 	getStatus,
+	getUserCheckToken,
 	selectAuth,
 } from "../store/slices/authSlice";
 
@@ -23,7 +24,12 @@ export default function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchAuthLocal());
+		dispatch(fetchAuthLocal())
+			.unwrap()
+			.then(() => {
+				dispatch(getUserCheckToken());
+			})
+			.catch(() => {});
 	}, []);
 
 	return (

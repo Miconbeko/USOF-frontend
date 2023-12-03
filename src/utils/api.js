@@ -26,6 +26,7 @@ api.routes = {
 	usersByLogins: `/users/logins`,
 	usersByIds: `/users/ids`,
 	createPost: `/posts`,
+	userByToken: `/users/token`,
 };
 
 const rethrow = (msg) => {
