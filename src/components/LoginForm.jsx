@@ -3,10 +3,17 @@ import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import ErrorMessage from "./ErrorMessage";
 import SubmitButton from "./SubmitButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, setCount } from "../store/slices/counterSlice";
+import {
+	fetchAuth,
+	getError,
+	getStatus,
+	selectAuth,
+} from "../store/slices/authSlice";
+import Loading from "./Loading";
 
 const loginSchema = yup.object({
 	login: yup.string().trim().required(""),
@@ -14,20 +21,35 @@ const loginSchema = yup.object({
 });
 
 export default function LoginForm() {
+	const auth = useSelector(selectAuth);
+	const authStatus = useSelector(getStatus);
+	const authError = useSelector(getError);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [errMsg, setErrMsg] = useState(``);
+	const [loading, setLoading] = useState(false);
 	const inputRef = useRef(null);
 
-	const count = useSelector((state) => state.counter.count);
-	const dispatch = useDispatch();
-
 	const handleLogin = async (values) => {
+		// try {
+		// 	const res = await api.post(api.routes.login, values);
+		//
+		// 	window.localStorage.setItem(`token`, res.data.token);
+		// } catch (err) {
+		// 	api.catcher(err, setErrMsg);
+		// }
 		try {
-			const res = await api.post(api.routes.login, values);
-
-			window.localStorage.setItem(`token`, res.data.token);
+			if (authStatus !== `succeeded`) {
+				setLoading(true);
+				await dispatch(fetchAuth(values)).unwrap();
+				navigate(`/`);
+				// setErrMsg(null)
+			}
 		} catch (err) {
-			api.catcher(err, setErrMsg);
+			setErrMsg(err.message);
 		}
+		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -36,14 +58,10 @@ export default function LoginForm() {
 		}
 	}, [inputRef]);
 
-	return (
+	const alreadyLoggedIn = <div>You're already logged in</div>;
+
+	const form = (
 		<>
-			<section>
-				<h2>{count}</h2>
-				<button onClick={() => dispatch(increment())}>+</button>
-				<button onClick={() => dispatch(decrement())}>-</button>
-				<button onClick={() => dispatch(setCount(5))}>=5</button>
-			</section>
 			<Formik
 				initialValues={{
 					login: ``,
@@ -69,6 +87,16 @@ export default function LoginForm() {
 				</Form>
 			</Formik>
 			<Link to={`/register`}>Get an account</Link>
+		</>
+	);
+
+	return (
+		<>
+			{(() => {
+				if (authStatus === `succeeded`) return alreadyLoggedIn;
+				if (loading) return <Loading />;
+				return form;
+			})()}
 		</>
 	);
 }

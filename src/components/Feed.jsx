@@ -28,7 +28,6 @@ export default function Feed() {
 							ids: uniqueUsersId.join(`,`),
 						},
 					});
-
 					const users = res.data.users;
 
 					for (const post of posts) {

@@ -28,9 +28,7 @@ export const fetchPost = createAsyncThunk(`post/fetchPost`, async (params) => {
 
 		return postResponse.data;
 	} catch (err) {
-		api.catcher(err, (msg) => {
-			throw new Error(msg);
-		});
+		api.catcher(err, api.errorHandlers.rethrow);
 	}
 });
 
@@ -40,12 +38,9 @@ export const fetchComments = createAsyncThunk(
 		try {
 			const res = await api.get(api.routes.commentsToPost(params.id));
 
-			// console.log(res.data);
 			return res.data;
 		} catch (err) {
-			api.catcher(err, (msg) => {
-				throw new Error(msg);
-			});
+			api.catcher(err, api.errorHandlers.rethrow);
 		}
 	},
 );
@@ -57,6 +52,16 @@ export const fetchPostAndComments = createAsyncThunk(
 		dispatch(fetchComments(params));
 	},
 );
+
+export const createPost = createAsyncThunk(`post/create`, async (params) => {
+	try {
+		const res = await api.post(api.routes.createPost, params);
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
 
 export const postSlice = createSlice({
 	name: `post`,
@@ -70,7 +75,7 @@ export const postSlice = createSlice({
 			.addCase(fetchPost.fulfilled, (state, action) => {
 				const comments = state.post.comments;
 
-				state.status = `success`;
+				state.status = `succeeded`;
 				state.post = action.payload.post;
 				state.post.comments = comments;
 			})
@@ -84,10 +89,23 @@ export const postSlice = createSlice({
 				state.status = `loading`;
 			})
 			.addCase(fetchComments.fulfilled, (state, action) => {
-				state.status = `success`;
+				state.status = `succeeded`;
 				state.post.comments = action.payload.comments;
 			})
 			.addCase(fetchComments.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
+			})
+
+			.addCase(createPost.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(createPost.fulfilled, (state, action) => {
+				state.status = `succeeded`;
+				state.post = action.payload.post;
+			})
+			.addCase(createPost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
 			});

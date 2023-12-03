@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = `http://localhost:14880/api`;
 
@@ -16,9 +17,19 @@ api.routes = {
 	userById: (id) => `/users/id/${id}`,
 	usersByLogins: `/users/logins`,
 	usersByIds: `/users/ids`,
+	createPost: `/posts`,
+};
+
+const rethrow = (msg) => {
+	throw new Error(msg);
+};
+
+api.errorHandlers = {
+	rethrow,
 };
 
 api.catcher = (err, fn = console.error) => {
+	console.error(err.response.data);
 	if (err.response) {
 		// The request was made and the server responded with a status code
 		// that falls out of the range of 2xx

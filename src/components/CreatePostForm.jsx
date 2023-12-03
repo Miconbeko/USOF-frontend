@@ -3,9 +3,9 @@ import * as yup from "yup";
 import { post } from "axios";
 import ErrorMessage from "./ErrorMessage";
 import SubmitButton from "./SubmitButton";
-import { useDispatch } from "react-redux";
-import { addPost } from "../store/slices/postsSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { createPost, getError, getStatus } from "../store/slices/postSlice";
 
 const postSchema = yup.object({
 	title: yup
@@ -24,9 +24,13 @@ export default function CreatePostForm() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	// const postStatus = useSelector(getStatus);
+	// const postError = useSelector(getError);
+
 	const handlePostCreation = async (values) => {
-		dispatch(addPost(values.title, values.content));
-		navigate(`/`);
+		dispatch(createPost(values));
+		// navigate(`/`);
+		// console.error()
 	};
 
 	return (

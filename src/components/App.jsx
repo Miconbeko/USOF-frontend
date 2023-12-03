@@ -7,8 +7,25 @@ import Missing from "../pages/Missing";
 import CreatePostForm from "./CreatePostForm";
 import PostPage from "../pages/PostPage";
 import UserPage from "../pages/UserPage";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	fetchAuthLocal,
+	getError,
+	getStatus,
+	selectAuth,
+} from "../store/slices/authSlice";
 
 export default function App() {
+	const auth = useSelector(selectAuth);
+	const authStatus = useSelector(getStatus);
+	const authError = useSelector(getError);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchAuthLocal());
+	}, []);
+
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -19,8 +36,8 @@ export default function App() {
 					<Route path="/createPost" element={<CreatePostForm />} />
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
-					<Route path="/unknownUser" element={<Missing />} /> //TODO:
-					make another page for unknown user
+					<Route path="/unknownUser" element={<Missing />} />
+					//TODO: make another page for unknown user
 					<Route path="*" element={<Missing />} />
 				</Route>
 			</Routes>

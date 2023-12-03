@@ -13,9 +13,7 @@ export const fetchUser = createAsyncThunk(`user/fetchUser`, async (params) => {
 
 		return res.data;
 	} catch (err) {
-		api.catcher(err, (msg) => {
-			throw new Error(msg);
-		});
+		api.catcher(err, api.errorHandlers.rethrow);
 	}
 });
 
