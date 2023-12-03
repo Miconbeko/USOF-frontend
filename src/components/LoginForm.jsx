@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import ErrorMessage from "./ErrorMessage";
 import SubmitButton from "./SubmitButton";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, setCount } from "../store/slices/counterSlice";
@@ -26,6 +26,8 @@ export default function LoginForm() {
 	const authError = useSelector(getError);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const from = location.state?.from?.pathname || "/";
 
 	const [errMsg, setErrMsg] = useState(``);
 	const [loading, setLoading] = useState(false);
@@ -43,7 +45,7 @@ export default function LoginForm() {
 			if (authStatus !== `succeeded`) {
 				setLoading(true);
 				await dispatch(fetchAuth(values)).unwrap();
-				navigate(`/`);
+				navigate(from, { replace: true });
 				// setErrMsg(null)
 			}
 		} catch (err) {

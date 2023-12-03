@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import Main from "../pages/Main";
 import Layout from "./Layout";
-import Missing from "../pages/Missing";
+import UnknownRoute from "../pages/UnknownRoute";
 import CreatePostForm from "./CreatePostForm";
 import PostPage from "../pages/PostPage";
 import UserPage from "../pages/UserPage";
@@ -16,6 +16,8 @@ import {
 	getUserCheckToken,
 	selectAuth,
 } from "../store/slices/authSlice";
+import RequireAuthRoute from "./RequireAuthRoute";
+import UnauthorizedPage from "../pages/UnauthorizedPage";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -39,12 +41,18 @@ export default function App() {
 					<Route path="/" element={<Main />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
-					<Route path="/createPost" element={<CreatePostForm />} />
+					<Route element={<RequireAuthRoute />}>
+						<Route
+							path="/createPost"
+							element={<CreatePostForm />}
+						/>
+					</Route>
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
-					<Route path="/unknownUser" element={<Missing />} />
+					<Route path="/unknownUser" element={<UnknownRoute />} />
 					//TODO: make another page for unknown user
-					<Route path="*" element={<Missing />} />
+					<Route path="/unauth" element={<UnauthorizedPage />} />
+					<Route path="*" element={<UnknownRoute />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
