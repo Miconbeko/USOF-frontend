@@ -19,11 +19,9 @@ export default function PostPage() {
 	const dispatch = useDispatch();
 
 	const { id } = useParams();
-	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		dispatch(fetchPostAndComments({ id }, dispatch));
-		setLoading(false);
 	}, []);
 
 	const loadedPostPage = (
@@ -48,8 +46,8 @@ export default function PostPage() {
 	return (
 		<>
 			{(() => {
-				if (loading) return <Loading />;
-				if (!postError) return loadedPostPage;
+				if (postStatus === `loading`) return <Loading />;
+				if (postStatus === `succeeded`) return loadedPostPage;
 				return <p>{postError}</p>;
 			})()}
 		</>

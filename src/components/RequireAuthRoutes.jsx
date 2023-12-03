@@ -5,7 +5,7 @@ import UnauthorizedPage from "../pages/UnauthorizedPage";
 import LoginForm from "./LoginForm";
 import roles from "../utils/rolesPriority";
 
-export default function RequireAuthRoute({ allowedRoles }) {
+export default function RequireAuthRoutes({ allowedRoles }) {
 	const auth = useSelector(selectAuth);
 	const authStatus = useSelector(getStatus);
 	const authError = useSelector(getError);

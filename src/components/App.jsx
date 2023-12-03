@@ -16,7 +16,7 @@ import {
 	getUserCheckToken,
 	selectAuth,
 } from "../store/slices/authSlice";
-import RequireAuthRoute from "./RequireAuthRoute";
+import RequireAuthRoutes from "./RequireAuthRoutes";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
 					<Route path="/" element={<Main />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
-					<Route element={<RequireAuthRoute />}>
+					<Route element={<RequireAuthRoutes />}>
 						<Route
 							path="/createPost"
 							element={<CreatePostForm />}

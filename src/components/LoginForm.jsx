@@ -30,20 +30,11 @@ export default function LoginForm() {
 	const from = location.state?.from?.pathname || "/";
 
 	const [errMsg, setErrMsg] = useState(``);
-	const [loading, setLoading] = useState(false);
 	const inputRef = useRef(null);
 
 	const handleLogin = async (values) => {
-		// try {
-		// 	const res = await api.post(api.routes.login, values);
-		//
-		// 	window.localStorage.setItem(`token`, res.data.token);
-		// } catch (err) {
-		// 	api.catcher(err, setErrMsg);
-		// }
 		try {
 			if (authStatus !== `succeeded`) {
-				setLoading(true);
 				await dispatch(fetchAuth(values)).unwrap();
 				navigate(from, { replace: true });
 				// setErrMsg(null)
@@ -51,7 +42,6 @@ export default function LoginForm() {
 		} catch (err) {
 			setErrMsg(err.message);
 		}
-		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -95,8 +85,8 @@ export default function LoginForm() {
 	return (
 		<>
 			{(() => {
+				if (authStatus === `loading`) return <Loading />;
 				if (authStatus === `succeeded`) return alreadyLoggedIn;
-				if (loading) return <Loading />;
 				return form;
 			})()}
 		</>

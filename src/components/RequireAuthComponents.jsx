@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { getError, getStatus, selectAuth } from "../store/slices/authSlice";
 import roles from "../utils/rolesPriority";
 
-export default function RequireAuthComponent({
+export default function RequireAuthComponents({
 	children,
 	allowedRoles,
 	unauthOnly = false,
@@ -14,6 +14,8 @@ export default function RequireAuthComponent({
 	return (
 		<>
 			{(() => {
+				// if (authStatus === `loading`) return;
+
 				if (authStatus === `idle`) {
 					if (!unauthOnly) return;
 					return children;

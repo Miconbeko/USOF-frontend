@@ -16,6 +16,7 @@ export default function LogoutButton({ children }) {
 
 	const handleLogout = () => {
 		dispatch(logout());
+		navigate(`/`);
 	};
 
 	return (

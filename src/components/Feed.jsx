@@ -36,7 +36,7 @@ export default function Feed() {
 						);
 					}
 				} catch (err) {
-					console.error(err);
+					api.catcher(err);
 				}
 
 				setPosts(posts);

@@ -8,6 +8,8 @@ import {
 } from "../store/slices/userSlice";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import RequireOwnerComponents from "../components/RequireOwnerComponents";
+import LogoutButton from "../components/LogoutButton";
 
 export default function UserPage() {
 	const user = useSelector(selectUser);
@@ -16,11 +18,9 @@ export default function UserPage() {
 	const dispatch = useDispatch();
 
 	const { login } = useParams();
-	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		dispatch(fetchUser({ login }));
-		setLoading(false);
 	}, []);
 
 	const loadedUserPage = (
@@ -34,14 +34,17 @@ export default function UserPage() {
 			<p>Full name: {user.fullName}</p>
 			<p>Rating: {user.rating}</p>
 			<p>Role: {user.role}</p>
+			<RequireOwnerComponents userId={user.id}>
+				<LogoutButton>Logout</LogoutButton> <br />
+			</RequireOwnerComponents>
 		</>
 	);
 
 	return (
 		<>
 			{(() => {
-				if (loading) return <Loading />;
-				if (!userError) return loadedUserPage;
+				if (userStatus === `loading`) return <Loading />;
+				if (userStatus === `succeeded`) return loadedUserPage;
 				return <p>User not found</p>;
 			})()}
 		</>
