@@ -1,10 +1,18 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../store/slices/authSlice";
 
 const API_URL = `http://localhost:14880/api`;
 
 const api = axios.create({
 	baseURL: API_URL,
+});
+
+api.interceptors.request.use((config) => {
+	config.headers.token = window.localStorage.getItem("token");
+
+	return config;
 });
 
 api.routes = {
@@ -29,10 +37,10 @@ api.errorHandlers = {
 };
 
 api.catcher = (err, fn = console.error) => {
-	console.error(err.response.data);
 	if (err.response) {
 		// The request was made and the server responded with a status code
 		// that falls out of the range of 2xx
+		console.error(err.response.data);
 		fn(err.response.data.message);
 		// console.log(err.response.data);
 		// console.log(err.response.status);
