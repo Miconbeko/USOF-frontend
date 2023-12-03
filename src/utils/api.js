@@ -28,6 +28,8 @@ api.routes = {
 	usersByLogins: `/users/logins`,
 	usersByIds: `/users/ids`,
 	createPost: `/posts`,
+	createAnswer: (id) => `/posts/${id}/comments`,
+	createComment: (id) => `/comments/${id}/comment`,
 	userByToken: `/users/token`,
 };
 

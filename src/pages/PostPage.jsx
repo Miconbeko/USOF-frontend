@@ -11,6 +11,8 @@ import {
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import UserMinify from "../components/UserMinify";
+import CommentForm from "../components/CommentForm";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
@@ -19,10 +21,15 @@ export default function PostPage() {
 	const dispatch = useDispatch();
 
 	const { id } = useParams();
+	const [commented, setCommented] = useState(null);
+
+	const refresh = () => {
+		setCommented(nanoid());
+	};
 
 	useEffect(() => {
 		dispatch(fetchPostAndComments({ id }, dispatch));
-	}, []);
+	}, [commented]);
 
 	const loadedPostPage = (
 		<>
@@ -40,6 +47,7 @@ export default function PostPage() {
 					</div>
 				))}
 			</div>
+			<CommentForm postId={post.id} onComment={refresh} />
 		</>
 	);
 
