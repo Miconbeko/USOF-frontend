@@ -18,6 +18,7 @@ import {
 } from "../store/slices/authSlice";
 import RequireAuthRoutes from "./RequireAuthRoutes";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
+import UsersFeed from "./UsersFeed";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -39,6 +40,7 @@ export default function App() {
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route path="/" element={<Main />} />
+					<Route path="/users" element={<UsersFeed />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
 					<Route element={<RequireAuthRoutes />}>

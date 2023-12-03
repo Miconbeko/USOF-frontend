@@ -6,7 +6,7 @@ import { selectAllPosts } from "../store/slices/postsSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import Loading from "./Loading";
 
-export default function Feed() {
+export default function PostsFeed() {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 
@@ -51,12 +51,16 @@ export default function Feed() {
 
 	return (
 		<>
-			Feed <br />
+			Feed: <br />
 			{(() => {
 				if (loading) return <Loading />;
 				if (posts && posts.length)
 					return posts.map((post) => (
-						<Post key={post.id} post={post} />
+						<div key={post.id}>
+							<Post post={post} />
+							<br />
+							<br />
+						</div>
 					));
 				return <p>There is no posts :( </p>;
 			})()}

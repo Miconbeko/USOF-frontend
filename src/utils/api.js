@@ -20,6 +20,7 @@ api.routes = {
 	login: `/auth/login`,
 	logout: `/auth/logout`,
 	allPosts: `/posts`,
+	allUsers: `/users`,
 	postById: (id) => `/posts/${id}`,
 	commentsToPost: (id) => `/posts/${id}/comments`,
 	userByLogin: (login) => `/users/login/${login}`,

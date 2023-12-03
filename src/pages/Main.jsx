@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Feed from "../components/Feed";
+import PostsFeed from "../components/PostsFeed";
 import LogoutButton from "../components/LogoutButton";
 import RequireAuthComponents from "../components/RequireAuthComponents";
 import { useSelector } from "react-redux";
@@ -15,10 +15,11 @@ export default function Main() {
 				<Link to={`/register`}>Sign up</Link> <br />
 			</RequireAuthComponents>
 			<RequireAuthComponents>
-				<Link to={`/user/${auth?.user?.login}`}>Profile</Link>
+				<Link to={`/user/${auth?.user?.login}`}>Profile</Link> <br />
 				<Link to={`/createPost`}>Create post </Link> <br />
 			</RequireAuthComponents>
-			<Feed />
+			<Link to={`/users`}>All users</Link> <br /> <br />
+			<PostsFeed />
 		</>
 	);
 }

@@ -9,8 +9,6 @@ export default function Post({ post }) {
 				<p>Rating: {post.rating}</p>
 			</Link>
 			<UserMinify user={post.author} />
-			<br />
-			<br />
 		</article>
 	);
 }
