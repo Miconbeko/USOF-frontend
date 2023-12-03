@@ -5,7 +5,13 @@ import ErrorMessage from "./ErrorMessage";
 import SubmitButton from "./SubmitButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createPost, getError, getStatus } from "../store/slices/postSlice";
+import {
+	createPost,
+	getError,
+	getStatus,
+	selectPost,
+} from "../store/slices/postSlice";
+import { useState } from "react";
 
 const postSchema = yup.object({
 	title: yup
@@ -21,16 +27,23 @@ const postSchema = yup.object({
 });
 
 export default function CreatePostForm() {
+	const post = useSelector(selectPost);
+	const postStatus = useSelector(getStatus);
+	const postError = useSelector(getError);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	// const postStatus = useSelector(getStatus);
-	// const postError = useSelector(getError);
+	const [errMsg, setErrMsg] = useState(``);
 
 	const handlePostCreation = async (values) => {
-		dispatch(createPost(values));
-		// navigate(`/`);
-		// console.error()
+		dispatch(createPost(values))
+			.unwrap()
+			.then((payload) => {
+				navigate(`/post/${payload.post.id}`);
+			})
+			.catch((err) => {
+				setErrMsg(err.message);
+			});
 	};
 
 	return (
@@ -43,6 +56,7 @@ export default function CreatePostForm() {
 			onSubmit={handlePostCreation}
 		>
 			<Form>
+				<p>{errMsg}</p>
 				<label htmlFor="title">Title:</label>
 				<Field name="title" />
 				<ErrorMessage name="title" /> <br />

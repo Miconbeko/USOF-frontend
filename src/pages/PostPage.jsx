@@ -47,7 +47,7 @@ export default function PostPage() {
 					</div>
 				))}
 			</div>
-			<CommentForm postId={post.id} onComment={refresh} />
+			<CommentForm postId={post.id} onSubmit={refresh} />
 		</>
 	);
 

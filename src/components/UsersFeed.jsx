@@ -7,6 +7,7 @@ import UserMinify from "./UserMinify";
 export default function UsersFeed() {
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [errMsg, setErrMsg] = useState(``);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -15,7 +16,7 @@ export default function UsersFeed() {
 
 				setUsers(res.data.users);
 			} catch (err) {
-				api.catcher(err);
+				api.catcher(err, setErrMsg);
 			}
 			setLoading(false);
 		};
@@ -28,6 +29,7 @@ export default function UsersFeed() {
 			Users: <br />
 			{(() => {
 				if (loading) return <Loading />;
+				if (errMsg) return <p>{errMsg}</p>;
 				if (users && users.length)
 					return users.map((user) => (
 						<div key={user.id}>

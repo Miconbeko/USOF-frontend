@@ -17,7 +17,7 @@ const commentSchema = yup.object({
 		.max(65530, `10 to 65530 characters. All characters allowed`),
 });
 
-export default function CommentForm({ postId, commentId, onComment }) {
+export default function CommentForm({ postId, commentId, onSubmit }) {
 	const auth = useSelector(selectAuth);
 	const authStatus = useSelector(getStatus);
 	const dispatch = useDispatch();
@@ -37,9 +37,9 @@ export default function CommentForm({ postId, commentId, onComment }) {
 				);
 			else res = await api.post(api.routes.createAnswer(postId), values);
 
-			if (onComment) onComment();
+			if (onSubmit) onSubmit();
 		} catch (err) {
-			api.catcher(err); //TODO: setErrMsg
+			api.catcher(err, setErrMsg);
 		}
 	};
 
@@ -56,6 +56,7 @@ export default function CommentForm({ postId, commentId, onComment }) {
 			onSubmit={handleComment}
 		>
 			<Form>
+				<p>{errMsg}</p>
 				<Field name="content" as="textarea" innerRef={inputRef} />
 				<ErrorMessage name="content" /> <br />
 				<SubmitButton
