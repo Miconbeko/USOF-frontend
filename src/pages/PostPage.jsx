@@ -13,14 +13,13 @@ import Loading from "../components/Loading";
 import UserMinify from "../components/UserMinify";
 
 export default function PostPage() {
-	const { id } = useParams();
-	const dispatch = useDispatch();
-
-	const [loading, setLoading] = useState(true);
-
 	const post = useSelector(selectPost);
 	const postStatus = useSelector(getStatus);
 	const postError = useSelector(getError);
+	const dispatch = useDispatch();
+
+	const { id } = useParams();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		dispatch(fetchPostAndComments({ id }, dispatch));

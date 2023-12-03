@@ -10,14 +10,13 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 
 export default function UserPage() {
-	const { login } = useParams();
-	const dispatch = useDispatch();
-
-	const [loading, setLoading] = useState(true);
-
 	const user = useSelector(selectUser);
 	const userStatus = useSelector(getStatus);
 	const userError = useSelector(getError);
+	const dispatch = useDispatch();
+
+	const { login } = useParams();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		dispatch(fetchUser({ login }));

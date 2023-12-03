@@ -50,6 +50,16 @@ export const getUserCheckToken = createAsyncThunk(
 	},
 );
 
+export const logout = createAsyncThunk(`auth/logout`, async () => {
+	try {
+		const res = api.delete(api.routes.logout);
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
+
 export const authSlice = createSlice({
 	name: `auth`,
 	initialState,
@@ -90,6 +100,21 @@ export const authSlice = createSlice({
 			.addCase(getUserCheckToken.rejected, (state, action) => {
 				state.status = `idle`;
 				state.error = null;
+				state.auth = {};
+				window.localStorage.removeItem(`token`);
+			})
+
+			.addCase(logout.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(logout.fulfilled, (state, action) => {
+				state.status = `idle`;
+				state.auth = {};
+				window.localStorage.removeItem(`token`);
+			})
+			.addCase(logout.rejected, (state, action) => {
+				state.status = `idle`;
 				state.auth = {};
 				window.localStorage.removeItem(`token`);
 			});

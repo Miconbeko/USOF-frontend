@@ -18,6 +18,7 @@ api.interceptors.request.use((config) => {
 api.routes = {
 	register: `/auth/register`,
 	login: `/auth/login`,
+	logout: `/auth/logout`,
 	allPosts: `/posts`,
 	postById: (id) => `/posts/${id}`,
 	commentsToPost: (id) => `/posts/${id}/comments`,
