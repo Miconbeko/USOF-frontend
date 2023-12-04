@@ -3,6 +3,7 @@ import RequireAuthComponents from "./wrappers/RequireAuthComponents";
 import { useState } from "react";
 import CommentForm from "./forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
+import ConfirmButton from "./buttons/ConfirmButton";
 
 export default function Comment({ comment, onCommentAdd }) {
 	const [showCommnetForm, setShowCommentForm] = useState(false);
@@ -20,7 +21,9 @@ export default function Comment({ comment, onCommentAdd }) {
 		<div>
 			<p>{comment.content}</p>
 			<RequireAuthComponents>
-				<button onClick={handleShowForm}>Comment</button>
+				<ConfirmButton actionHandler={handleShowForm} withoutWarning>
+					Comment
+				</ConfirmButton>
 			</RequireAuthComponents>
 			<UserMinify user={comment.author} />
 			{showCommnetForm ? (
