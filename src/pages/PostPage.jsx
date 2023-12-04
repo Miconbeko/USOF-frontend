@@ -6,8 +6,11 @@ import {
 	fetchPost,
 	fetchPostAndComments,
 	getError,
+	getPostLock,
 	getStatus,
+	isPostLocked,
 	lockPost,
+	postLock,
 	selectPost,
 } from "../store/slices/postSlice";
 import { useEffect, useState } from "react";
@@ -21,6 +24,7 @@ import RequireAuthComponents from "../components/RequireAuthComponents";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
+	const postLock = useSelector(getPostLock);
 	const postStatus = useSelector(getStatus);
 	const postError = useSelector(getError);
 	const dispatch = useDispatch();
@@ -55,12 +59,20 @@ export default function PostPage() {
 		}
 	};
 
+	const lockMessage = (
+		<>
+			<p>This post is locked by BY:</p>
+			<UserMinify user={post?.lock?.author} /> <br /> <br />
+		</>
+	);
+
 	useEffect(() => {
 		dispatch(fetchPostAndComments({ id }, dispatch));
 	}, [commented]);
 
 	const loadedPostPage = (
 		<>
+			{postLock ? lockMessage : null}
 			<RequireOwnerComponents
 				userId={post.userId}
 				allowedRoles={[`admin`]}

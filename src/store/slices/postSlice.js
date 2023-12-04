@@ -13,25 +13,34 @@ const initialState = {
 	error: null,
 };
 
-export const fetchPost = createAsyncThunk(`post/fetchPost`, async (params) => {
-	try {
-		const postResponse = await api.get(api.routes.postById(params.id));
-
+export const fetchPost = createAsyncThunk(
+	`post/fetchPost`,
+	async (params, { dispatch }) => {
 		try {
-			const userResponse = await api.get(
-				api.routes.userById(postResponse.data.post.userId),
-			);
+			const postResponse = await api.get(api.routes.postById(params.id));
 
-			postResponse.data.post.author = userResponse.data.user;
+			try {
+				const userResponse = await api.get(
+					api.routes.userById(postResponse.data.post.userId),
+				);
+
+				postResponse.data.post.author = userResponse.data.user;
+			} catch (err) {
+				console.error(err);
+			}
+
+			if (postResponse.data.post.lock) {
+				postResponse.data.post.lock.author =
+					postResponse.data.post.lock.owner;
+				delete postResponse.data.post.lock.owner;
+			}
+
+			return postResponse.data;
 		} catch (err) {
-			console.error(err);
+			api.catcher(err, api.errorHandlers.rethrow);
 		}
-
-		return postResponse.data;
-	} catch (err) {
-		api.catcher(err, api.errorHandlers.rethrow);
-	}
-});
+	},
+);
 
 export const fetchComments = createAsyncThunk(
 	`post/fetchComments`,
@@ -51,6 +60,7 @@ export const fetchPostAndComments = createAsyncThunk(
 	async (params, { dispatch }) => {
 		dispatch(fetchPost(params));
 		dispatch(fetchComments(params));
+		// dispatch(fetchLockAuthor());
 	},
 );
 
@@ -77,17 +87,41 @@ export const deletePost = createAsyncThunk(`post/delete`, async (params) => {
 	}
 });
 
-export const lockPost = createAsyncThunk(`post/lock`, async (params) => {
-	try {
-		const res = await api.post(api.routes.lockPost(params.id), {
-			timer: params.timer,
-		});
+export const lockPost = createAsyncThunk(
+	`post/lock`,
+	async (params, { dispatch }) => {
+		try {
+			const res = await api.post(api.routes.lockPost(params.id), {
+				timer: params.timer,
+			});
 
-		return res.data;
-	} catch (err) {
-		api.catcher(err, api.errorHandlers.rethrow);
-	}
-});
+			// await dispatch(fetchLockAuthor({ lock: res.data.lock }));
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, api.errorHandlers.rethrow);
+		}
+	},
+);
+
+// export const fetchLockAuthor = createAsyncThunk(
+// 	`post/getLockAuthor`,
+// 	async (params, { getState }) => {
+// 		const state = getState();
+// 		const lock = state.post.post.lock;
+//
+// 		console.log(state.post.post);
+// 		if (!lock) throw new Error(`Post not locked`);
+//
+// 		try {
+// 			const res = await api.get(api.routes.userById(lock.userId));
+//
+// 			return res.data;
+// 		} catch (err) {
+// 			api.catcher(err, api.errorHandlers.rethrow);
+// 		}
+// 	},
+// );
 
 export const postSlice = createSlice({
 	name: `post`,
@@ -167,10 +201,15 @@ export const postSlice = createSlice({
 				state.status = `failed`;
 				state.error = action.error.message;
 			});
+
+		// .addCase(fetchLockAuthor.fulfilled, (state, action) => {
+		// 	state.post.lock.author = action.payload.user;
+		// });
 	},
 });
 
 export const selectPost = (state) => state.post.post;
+export const getPostLock = (state) => state.post.post.lock;
 export const getStatus = (state) => state.post.status;
 export const getError = (state) => state.post.error;
 
