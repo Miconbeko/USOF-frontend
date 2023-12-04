@@ -17,12 +17,14 @@ import {
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import UserMinify from "../components/UserMinify";
-import CommentForm from "../components/CommentForm";
+import CommentForm from "../components/forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
-import RequireOwnerComponents from "../components/RequireOwnerComponents";
-import ConfirmButton from "../components/ConfirmButton";
-import RequireAuthComponents from "../components/RequireAuthComponents";
-import CreatePostForm from "../components/CreatePostForm";
+import RequireOwnerComponents from "../components/wrappers/RequireOwnerComponents";
+import ConfirmButton from "../components/buttons/ConfirmButton";
+import RequireAuthComponents from "../components/wrappers/RequireAuthComponents";
+import PostForm from "../components/forms/PostForm";
+import Comment from "../components/Comment";
+import CommentsSection from "../components/feeds/CommentsSection";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
@@ -34,7 +36,7 @@ export default function PostPage() {
 
 	const { id } = useParams();
 	const [commented, setCommented] = useState(null);
-	const [edit, setEdit] = useState(false);
+	const [showEditForm, setShowEditForm] = useState(false);
 
 	const refresh = () => {
 		setCommented(nanoid());
@@ -71,7 +73,7 @@ export default function PostPage() {
 	};
 
 	const handlePostEdit = async () => {
-		setEdit(!edit);
+		setShowEditForm(!showEditForm);
 	};
 
 	const lockMessage = (
@@ -87,8 +89,8 @@ export default function PostPage() {
 
 	const loadedPostPage = (
 		<>
-			{edit ? (
-				<CreatePostForm edited handleEdit={handlePostEdit} />
+			{showEditForm ? (
+				<PostForm edited onSubmit={handlePostEdit} />
 			) : null}
 			{postLock ? lockMessage : null}
 			<RequireOwnerComponents
@@ -125,13 +127,7 @@ export default function PostPage() {
 			<br />
 			<div>
 				<h3>Answers:</h3>
-				{post?.comments?.map((comment) => (
-					<div key={comment.id}>
-						<p>{comment.content}</p>
-						<UserMinify user={comment.author} />
-						<br />
-					</div>
-				))}
+				<CommentsSection onCommentAdd={refresh} />
 			</div>
 			<CommentForm
 				postId={post.id}

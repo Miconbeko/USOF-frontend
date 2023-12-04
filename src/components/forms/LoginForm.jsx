@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
-import ErrorMessage from "./ErrorMessage";
-import SubmitButton from "./SubmitButton";
+import ErrorMessage from "../ErrorMessage";
+import SubmitButton from "../buttons/SubmitButton";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import api from "../utils/api";
+import api from "../../utils/api";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	fetchAuth,
 	getError,
 	getStatus,
 	selectAuth,
-} from "../store/slices/authSlice";
-import Loading from "./Loading";
+} from "../../store/slices/authSlice";
+import Loading from "../Loading";
 
 const loginSchema = yup.object({
 	login: yup.string().trim().required(""),

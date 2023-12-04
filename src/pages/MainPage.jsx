@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import PostsFeed from "../components/PostsFeed";
-import LogoutButton from "../components/LogoutButton";
-import RequireAuthComponents from "../components/RequireAuthComponents";
+import PostsFeed from "../components/feeds/PostsFeed";
+import LogoutButton from "../components/buttons/LogoutButton";
+import RequireAuthComponents from "../components/wrappers/RequireAuthComponents";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../store/slices/authSlice";
 
-export default function Main() {
+export default function MainPage() {
 	const auth = useSelector(selectAuth);
 
 	return (

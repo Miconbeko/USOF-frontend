@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../ErrorMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SubmitButton from "./SubmitButton";
-import api from "../utils/api";
+import SubmitButton from "../buttons/SubmitButton";
+import api from "../../utils/api";
 import { Link } from "react-router-dom";
 
 const registrationSchema = yup.object({

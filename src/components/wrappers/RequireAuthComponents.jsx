@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { getError, getStatus, selectAuth } from "../store/slices/authSlice";
-import roles from "../utils/rolesPriority";
+import { getError, getStatus, selectAuth } from "../../store/slices/authSlice";
+import roles from "../../utils/rolesPriority";
 
 export default function RequireAuthComponents({
 	children,

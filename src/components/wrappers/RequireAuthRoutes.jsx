@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { getError, getStatus, selectAuth } from "../store/slices/authSlice";
+import { getError, getStatus, selectAuth } from "../../store/slices/authSlice";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import UnauthorizedPage from "../pages/UnauthorizedPage";
-import LoginForm from "./LoginForm";
-import roles from "../utils/rolesPriority";
+import UnauthorizedPage from "../../pages/UnauthorizedPage";
+import LoginForm from "../forms/LoginForm";
+import roles from "../../utils/rolesPriority";
 
 export default function RequireAuthRoutes({ allowedRoles }) {
 	const auth = useSelector(selectAuth);

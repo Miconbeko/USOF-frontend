@@ -1,8 +1,8 @@
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
 import { post } from "axios";
-import ErrorMessage from "./ErrorMessage";
-import SubmitButton from "./SubmitButton";
+import ErrorMessage from "../ErrorMessage";
+import SubmitButton from "../buttons/SubmitButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import {
 	getError,
 	getStatus,
 	selectPost,
-} from "../store/slices/postSlice";
+} from "../../store/slices/postSlice";
 import { useState } from "react";
 
 const postSchema = yup.object({
@@ -27,7 +27,7 @@ const postSchema = yup.object({
 		.max(65530, `10 to 65530 characters. All characters allowed`),
 });
 
-export default function CreatePostForm({ edited = false, handleEdit }) {
+export default function PostForm({ edited = false, onSubmit, locked = false }) {
 	const post = useSelector(selectPost);
 	const postStatus = useSelector(getStatus);
 	const postError = useSelector(getError);
@@ -50,7 +50,7 @@ export default function CreatePostForm({ edited = false, handleEdit }) {
 		try {
 			await dispatch(editPost({ id: post.id, values })).unwrap();
 
-			handleEdit();
+			if (onSubmit) onSubmit();
 		} catch (err) {
 			setErrMsg(err.message);
 		}
@@ -68,10 +68,10 @@ export default function CreatePostForm({ edited = false, handleEdit }) {
 			<Form>
 				<p>{errMsg}</p>
 				<label htmlFor="title">Title:</label>
-				<Field name="title" />
+				<Field name="title" disabled={locked} />
 				<ErrorMessage name="title" /> <br />
 				<label htmlFor="content">Question:</label>
-				<Field name="content" as="textarea" />
+				<Field name="content" as="textarea" disabled={locked} />
 				<ErrorMessage name="content" /> <br />
 				<SubmitButton value={edited ? "Edit" : "Create"} />
 			</Form>

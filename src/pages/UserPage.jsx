@@ -8,8 +8,8 @@ import {
 } from "../store/slices/userSlice";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import RequireOwnerComponents from "../components/RequireOwnerComponents";
-import LogoutButton from "../components/LogoutButton";
+import RequireOwnerComponents from "../components/wrappers/RequireOwnerComponents";
+import LogoutButton from "../components/buttons/LogoutButton";
 
 export default function UserPage() {
 	const user = useSelector(selectUser);

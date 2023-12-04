@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import api from "../utils/api";
-import Loading from "./Loading";
-import Post from "./Post";
-import UserMinify from "./UserMinify";
+import api from "../../utils/api";
+import Loading from "../Loading";
+import Post from "../Post";
+import UserMinify from "../UserMinify";
 
 export default function UsersFeed() {
 	const [users, setUsers] = useState([]);

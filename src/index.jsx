@@ -6,8 +6,8 @@ import { Provider } from "react-redux";
 import "./css/index.css";
 
 import App from "./components/App";
-import RegisterForm from "./components/RegisterForm";
-import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/forms/RegisterForm";
+import LoginForm from "./components/forms/LoginForm";
 
 const root = createRoot(document.getElementById("root"));
 root.render(

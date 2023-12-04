@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getError, getStatus, selectAuth } from "../store/slices/authSlice";
+import { getError, getStatus, selectAuth } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import { deletePost } from "../store/slices/postSlice";
+import { deletePost } from "../../store/slices/postSlice";
 import { useState } from "react";
 
 export default function ConfirmButton({

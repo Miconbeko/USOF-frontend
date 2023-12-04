@@ -1,4 +1,4 @@
-export default function UnknownRoute() {
+export default function UnknownRoutePage() {
 	return (
 		<div>
 			<p>Ti tupoi?</p>

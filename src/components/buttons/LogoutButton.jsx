@@ -4,7 +4,7 @@ import {
 	getStatus,
 	logout,
 	selectAuth,
-} from "../store/slices/authSlice";
+} from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function LogoutButton({ children }) {

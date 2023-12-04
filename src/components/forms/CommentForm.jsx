@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getError, getStatus, selectAuth } from "../store/slices/authSlice";
+import { getError, getStatus, selectAuth } from "../../store/slices/authSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-import ErrorMessage from "./ErrorMessage";
-import SubmitButton from "./SubmitButton";
-import Loading from "./Loading";
-import api from "../utils/api";
+import ErrorMessage from "../ErrorMessage";
+import SubmitButton from "../buttons/SubmitButton";
+import Loading from "../Loading";
+import api from "../../utils/api";
 
 const commentSchema = yup.object({
 	content: yup

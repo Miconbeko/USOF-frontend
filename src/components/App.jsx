@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import RegisterForm from "./RegisterForm";
-import LoginForm from "./LoginForm";
-import Main from "../pages/Main";
-import Layout from "./Layout";
-import UnknownRoute from "../pages/UnknownRoute";
-import CreatePostForm from "./CreatePostForm";
+import RegisterForm from "./forms/RegisterForm";
+import LoginForm from "./forms/LoginForm";
+import MainPage from "../pages/MainPage";
+import Layout from "./layouts/Layout";
+import UnknownRoutePage from "../pages/UnknownRoutePage";
+import PostForm from "./forms/PostForm";
 import PostPage from "../pages/PostPage";
 import UserPage from "../pages/UserPage";
 import { useEffect } from "react";
@@ -16,9 +16,9 @@ import {
 	getUserCheckToken,
 	selectAuth,
 } from "../store/slices/authSlice";
-import RequireAuthRoutes from "./RequireAuthRoutes";
+import RequireAuthRoutes from "./wrappers/RequireAuthRoutes";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
-import UsersFeed from "./UsersFeed";
+import UsersFeed from "./feeds/UsersFeed";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -39,22 +39,19 @@ export default function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route path="/" element={<Main />} />
+					<Route path="/" element={<MainPage />} />
 					<Route path="/users" element={<UsersFeed />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
 					<Route element={<RequireAuthRoutes />}>
-						<Route
-							path="/createPost"
-							element={<CreatePostForm />}
-						/>
+						<Route path="/createPost" element={<PostForm />} />
 					</Route>
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
-					<Route path="/unknownUser" element={<UnknownRoute />} />
+					<Route path="/unknownUser" element={<UnknownRoutePage />} />
 					//TODO: make another page for unknown user
 					<Route path="/unauth" element={<UnauthorizedPage />} />
-					<Route path="*" element={<UnknownRoute />} />
+					<Route path="*" element={<UnknownRoutePage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

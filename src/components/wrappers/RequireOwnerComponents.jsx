@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { getError, getStatus, selectUser } from "../store/slices/userSlice";
-import { selectAuth } from "../store/slices/authSlice";
-import roles from "../utils/rolesPriority";
+import { getError, getStatus, selectUser } from "../../store/slices/userSlice";
+import { selectAuth } from "../../store/slices/authSlice";
+import roles from "../../utils/rolesPriority";
 
 export default function RequireOwnerComponents({
 	children,
