@@ -36,14 +36,13 @@ export default function CreatePostForm() {
 	const [errMsg, setErrMsg] = useState(``);
 
 	const handlePostCreation = async (values) => {
-		dispatch(createPost(values))
-			.unwrap()
-			.then((payload) => {
-				navigate(`/post/${payload.post.id}`);
-			})
-			.catch((err) => {
-				setErrMsg(err.message);
-			});
+		try {
+			const payload = await dispatch(createPost(values)).unwrap();
+
+			navigate(`/post/${payload.post.id}`);
+		} catch (err) {
+			setErrMsg(err.message);
+		}
 	};
 
 	return (

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../utils/api";
+import { logout } from "./authSlice";
 
 const initialState = {
 	post: {
@@ -66,6 +67,16 @@ export const createPost = createAsyncThunk(`post/create`, async (params) => {
 	}
 });
 
+export const deletePost = createAsyncThunk(`post/delete`, async (params) => {
+	try {
+		const res = await api.delete(api.routes.deletePost(params.id));
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
+
 export const postSlice = createSlice({
 	name: `post`,
 	initialState,
@@ -109,6 +120,19 @@ export const postSlice = createSlice({
 				state.post = action.payload.post;
 			})
 			.addCase(createPost.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
+			})
+
+			.addCase(deletePost.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(deletePost.fulfilled, (state, action) => {
+				state.status = `idle`;
+				state.post = {};
+			})
+			.addCase(deletePost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
 			});

@@ -13,6 +13,8 @@ import Loading from "../components/Loading";
 import UserMinify from "../components/UserMinify";
 import CommentForm from "../components/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
+import RequireOwnerComponents from "../components/RequireOwnerComponents";
+import PostDeleteButton from "../components/PostDeleteButton";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
@@ -33,6 +35,12 @@ export default function PostPage() {
 
 	const loadedPostPage = (
 		<>
+			<RequireOwnerComponents
+				userId={post.userId}
+				allowedRoles={[`admin`]}
+			>
+				<PostDeleteButton post={post}>Delete post</PostDeleteButton>
+			</RequireOwnerComponents>
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
 			<UserMinify user={post.author} />
