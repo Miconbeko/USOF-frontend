@@ -17,7 +17,12 @@ const commentSchema = yup.object({
 		.max(65530, `10 to 65530 characters. All characters allowed`),
 });
 
-export default function CommentForm({ postId, commentId, onSubmit }) {
+export default function CommentForm({
+	postId,
+	commentId,
+	onSubmit,
+	locked = false,
+}) {
 	const auth = useSelector(selectAuth);
 	const authStatus = useSelector(getStatus);
 	const dispatch = useDispatch();
@@ -57,7 +62,12 @@ export default function CommentForm({ postId, commentId, onSubmit }) {
 		>
 			<Form>
 				<p>{errMsg}</p>
-				<Field name="content" as="textarea" innerRef={inputRef} />
+				<Field
+					name="content"
+					as="textarea"
+					innerRef={inputRef}
+					disabled={locked}
+				/>
 				<ErrorMessage name="content" /> <br />
 				<SubmitButton
 					value={

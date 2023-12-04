@@ -12,6 +12,7 @@ import {
 	lockPost,
 	postLock,
 	selectPost,
+	unlockPost,
 } from "../store/slices/postSlice";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
@@ -59,6 +60,14 @@ export default function PostPage() {
 		}
 	};
 
+	const handlePostUnlock = async () => {
+		try {
+			await dispatch(unlockPost({ id: post.id }));
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	const lockMessage = (
 		<>
 			<p>This post is locked by BY:</p>
@@ -77,14 +86,23 @@ export default function PostPage() {
 				userId={post.userId}
 				allowedRoles={[`admin`]}
 			>
-				<ConfirmButton actionHandler={handlePostDelete}>
+				<ConfirmButton
+					actionHandler={handlePostDelete}
+					locked={Boolean(postLock)}
+				>
 					Delete post
 				</ConfirmButton>
 			</RequireOwnerComponents>
 			<RequireAuthComponents allowedRoles={[`admin`]}>
-				<ConfirmButton actionHandler={handlePostLock}>
-					Lock 1d
-				</ConfirmButton>
+				{postLock ? (
+					<ConfirmButton actionHandler={handlePostUnlock}>
+						Unlock
+					</ConfirmButton>
+				) : (
+					<ConfirmButton actionHandler={handlePostLock}>
+						Lock 1d
+					</ConfirmButton>
+				)}
 			</RequireAuthComponents>
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
@@ -100,7 +118,11 @@ export default function PostPage() {
 					</div>
 				))}
 			</div>
-			<CommentForm postId={post.id} onSubmit={refresh} />
+			<CommentForm
+				postId={post.id}
+				onSubmit={refresh}
+				locked={Boolean(postLock)}
+			/>
 		</>
 	);
 

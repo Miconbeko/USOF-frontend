@@ -4,10 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { deletePost } from "../store/slices/postSlice";
 import { useState } from "react";
 
-export default function ConfirmButton({ children, actionHandler }) {
+export default function ConfirmButton({
+	children,
+	actionHandler,
+	locked = false,
+}) {
 	const [ask, setAsk] = useState(false);
 
 	const handleAsk = async () => {
+		if (locked) return;
 		setAsk(true);
 	};
 
@@ -17,11 +22,14 @@ export default function ConfirmButton({ children, actionHandler }) {
 				<button
 					onClick={actionHandler}
 					className={"bg-amber-600 hover:bg-amber-500"}
+					disabled={locked}
 				>
 					{children}
 				</button>
 			) : (
-				<button onClick={handleAsk}>{children}</button>
+				<button onClick={handleAsk} disabled={locked}>
+					{children}
+				</button>
 			)}
 		</>
 	);

@@ -60,7 +60,6 @@ export const fetchPostAndComments = createAsyncThunk(
 	async (params, { dispatch }) => {
 		dispatch(fetchPost(params));
 		dispatch(fetchComments(params));
-		// dispatch(fetchLockAuthor());
 	},
 );
 
@@ -95,8 +94,6 @@ export const lockPost = createAsyncThunk(
 				timer: params.timer,
 			});
 
-			// await dispatch(fetchLockAuthor({ lock: res.data.lock }));
-
 			return res.data;
 		} catch (err) {
 			api.catcher(err, api.errorHandlers.rethrow);
@@ -104,24 +101,18 @@ export const lockPost = createAsyncThunk(
 	},
 );
 
-// export const fetchLockAuthor = createAsyncThunk(
-// 	`post/getLockAuthor`,
-// 	async (params, { getState }) => {
-// 		const state = getState();
-// 		const lock = state.post.post.lock;
-//
-// 		console.log(state.post.post);
-// 		if (!lock) throw new Error(`Post not locked`);
-//
-// 		try {
-// 			const res = await api.get(api.routes.userById(lock.userId));
-//
-// 			return res.data;
-// 		} catch (err) {
-// 			api.catcher(err, api.errorHandlers.rethrow);
-// 		}
-// 	},
-// );
+export const unlockPost = createAsyncThunk(
+	`post/unlock`,
+	async (params, { dispatch }) => {
+		try {
+			const res = await api.delete(api.routes.unlockPost(params.id));
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, api.errorHandlers.rethrow);
+		}
+	},
+);
 
 export const postSlice = createSlice({
 	name: `post`,
@@ -200,11 +191,20 @@ export const postSlice = createSlice({
 			.addCase(lockPost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
-			});
+			})
 
-		// .addCase(fetchLockAuthor.fulfilled, (state, action) => {
-		// 	state.post.lock.author = action.payload.user;
-		// });
+			.addCase(unlockPost.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(unlockPost.fulfilled, (state, action) => {
+				state.status = `succeeded`;
+				state.post.lock = null;
+			})
+			.addCase(unlockPost.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
+			});
 	},
 });
 

@@ -32,6 +32,7 @@ api.routes = {
 	createComment: (id) => `/comments/${id}/comment`,
 	deletePost: (id) => `/posts/${id}`,
 	lockPost: (id) => `/posts/${id}/lock`,
+	unlockPost: (id) => `/posts/${id}/lock`,
 	userByToken: `/users/token`,
 };
 
