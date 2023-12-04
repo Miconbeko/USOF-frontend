@@ -114,6 +114,20 @@ export const unlockPost = createAsyncThunk(
 	},
 );
 
+export const editPost = createAsyncThunk(`post/edit`, async (params) => {
+	try {
+		console.log({ ...params.values });
+		const res = await api.put(api.routes.editPost(params.id), {
+			...params.values,
+			categories: [1, 2],
+		});
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
+
 export const postSlice = createSlice({
 	name: `post`,
 	initialState,
@@ -202,6 +216,24 @@ export const postSlice = createSlice({
 				state.post.lock = null;
 			})
 			.addCase(unlockPost.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
+			})
+
+			.addCase(editPost.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(editPost.fulfilled, (state, action) => {
+				const comments = state.post.comments;
+				const lock = state.post.lock;
+
+				state.status = `succeeded`;
+				state.post = action.payload.post;
+				state.post.lock = lock;
+				state.post.comments = comments;
+			})
+			.addCase(editPost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
 			});

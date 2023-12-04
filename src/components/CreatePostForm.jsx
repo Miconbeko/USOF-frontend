@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
 	createPost,
+	editPost,
 	getError,
 	getStatus,
 	selectPost,
@@ -26,7 +27,7 @@ const postSchema = yup.object({
 		.max(65530, `10 to 65530 characters. All characters allowed`),
 });
 
-export default function CreatePostForm() {
+export default function CreatePostForm({ edited = false, handleEdit }) {
 	const post = useSelector(selectPost);
 	const postStatus = useSelector(getStatus);
 	const postError = useSelector(getError);
@@ -45,14 +46,24 @@ export default function CreatePostForm() {
 		}
 	};
 
+	const handlePostEdit = async (values) => {
+		try {
+			await dispatch(editPost({ id: post.id, values })).unwrap();
+
+			handleEdit();
+		} catch (err) {
+			setErrMsg(err.message);
+		}
+	};
+
 	return (
 		<Formik
 			initialValues={{
-				title: ``,
-				content: ``,
+				title: edited ? post.title : ``,
+				content: edited ? post.content : ``,
 			}}
 			validationSchema={postSchema}
-			onSubmit={handlePostCreation}
+			onSubmit={edited ? handlePostEdit : handlePostCreation}
 		>
 			<Form>
 				<p>{errMsg}</p>
@@ -62,7 +73,7 @@ export default function CreatePostForm() {
 				<label htmlFor="content">Question:</label>
 				<Field name="content" as="textarea" />
 				<ErrorMessage name="content" /> <br />
-				<SubmitButton value="Create" />
+				<SubmitButton value={edited ? "Edit" : "Create"} />
 			</Form>
 		</Formik>
 	);

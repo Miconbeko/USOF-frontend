@@ -13,14 +13,15 @@ export default function ConfirmButton({
 
 	const handleAsk = async () => {
 		if (locked) return;
-		setAsk(true);
+		if (ask) actionHandler();
+		setAsk(!ask);
 	};
 
 	return (
 		<>
 			{ask ? (
 				<button
-					onClick={actionHandler}
+					onClick={handleAsk}
 					className={"bg-amber-600 hover:bg-amber-500"}
 					disabled={locked}
 				>

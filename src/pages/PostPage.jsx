@@ -22,6 +22,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import RequireOwnerComponents from "../components/RequireOwnerComponents";
 import ConfirmButton from "../components/ConfirmButton";
 import RequireAuthComponents from "../components/RequireAuthComponents";
+import CreatePostForm from "../components/CreatePostForm";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
@@ -33,6 +34,7 @@ export default function PostPage() {
 
 	const { id } = useParams();
 	const [commented, setCommented] = useState(null);
+	const [edit, setEdit] = useState(false);
 
 	const refresh = () => {
 		setCommented(nanoid());
@@ -68,6 +70,10 @@ export default function PostPage() {
 		}
 	};
 
+	const handlePostEdit = async () => {
+		setEdit(!edit);
+	};
+
 	const lockMessage = (
 		<>
 			<p>This post is locked by BY:</p>
@@ -81,6 +87,9 @@ export default function PostPage() {
 
 	const loadedPostPage = (
 		<>
+			{edit ? (
+				<CreatePostForm edited handleEdit={handlePostEdit} />
+			) : null}
 			{postLock ? lockMessage : null}
 			<RequireOwnerComponents
 				userId={post.userId}
@@ -91,6 +100,12 @@ export default function PostPage() {
 					locked={Boolean(postLock)}
 				>
 					Delete post
+				</ConfirmButton>
+				<ConfirmButton
+					actionHandler={handlePostEdit}
+					locked={Boolean(postLock)}
+				>
+					Edit post
 				</ConfirmButton>
 			</RequireOwnerComponents>
 			<RequireAuthComponents allowedRoles={[`admin`]}>

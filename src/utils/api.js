@@ -22,6 +22,7 @@ api.routes = {
 	allPosts: `/posts`,
 	allUsers: `/users`,
 	postById: (id) => `/posts/${id}`,
+	editPost: (id) => `/posts/${id}`,
 	commentsToPost: (id) => `/posts/${id}/comments`,
 	userByLogin: (login) => `/users/login/${login}`,
 	userById: (id) => `/users/id/${id}`,
