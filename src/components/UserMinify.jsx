@@ -10,8 +10,10 @@ export default function UserMinify({ user }) {
 
 	const userPlate = (
 		<>
-			<Link to={`/user/${user?.login}`}>{user?.login}</Link>
-			<p>Rating: {user?.rating}</p>
+			<p>
+				<Link to={`/user/${user?.login}`}>{user?.login}</Link> Rating:
+				{user?.rating}
+			</p>
 		</>
 	);
 

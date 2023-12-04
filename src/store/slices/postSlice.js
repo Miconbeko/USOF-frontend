@@ -227,11 +227,13 @@ export const postSlice = createSlice({
 			.addCase(editPost.fulfilled, (state, action) => {
 				const comments = state.post.comments;
 				const lock = state.post.lock;
+				const author = state.post.author;
 
 				state.status = `succeeded`;
 				state.post = action.payload.post;
-				state.post.lock = lock;
 				state.post.comments = comments;
+				state.post.lock = lock;
+				state.post.author = author;
 			})
 			.addCase(editPost.rejected, (state, action) => {
 				state.status = `failed`;
