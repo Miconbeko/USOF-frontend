@@ -15,7 +15,7 @@ export default function RequireOwnerComponents({
 	return (
 		<>
 			{auth?.user?.id === userId ||
-			allowedRoles?.find((role) => roles[role] <= roles[auth.user.role])
+			allowedRoles?.find((role) => roles[role] <= roles[auth?.user?.role])
 				? children
 				: null}
 		</>

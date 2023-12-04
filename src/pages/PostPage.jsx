@@ -1,11 +1,13 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+	deletePost,
 	fetchComments,
 	fetchPost,
 	fetchPostAndComments,
 	getError,
 	getStatus,
+	lockPost,
 	selectPost,
 } from "../store/slices/postSlice";
 import { useEffect, useState } from "react";
@@ -14,19 +16,43 @@ import UserMinify from "../components/UserMinify";
 import CommentForm from "../components/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
 import RequireOwnerComponents from "../components/RequireOwnerComponents";
-import PostDeleteButton from "../components/PostDeleteButton";
+import ConfirmButton from "../components/ConfirmButton";
+import RequireAuthComponents from "../components/RequireAuthComponents";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
 	const postStatus = useSelector(getStatus);
 	const postError = useSelector(getError);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const { id } = useParams();
 	const [commented, setCommented] = useState(null);
 
 	const refresh = () => {
 		setCommented(nanoid());
+	};
+
+	const handlePostDelete = async () => {
+		try {
+			await dispatch(deletePost({ id: post.id })).unwrap();
+
+			navigate(`/`);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handlePostLock = async () => {
+		const timer = {
+			days: 1,
+		};
+
+		try {
+			await dispatch(lockPost({ id: post.id, timer }));
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	useEffect(() => {
@@ -39,8 +65,15 @@ export default function PostPage() {
 				userId={post.userId}
 				allowedRoles={[`admin`]}
 			>
-				<PostDeleteButton post={post}>Delete post</PostDeleteButton>
+				<ConfirmButton actionHandler={handlePostDelete}>
+					Delete post
+				</ConfirmButton>
 			</RequireOwnerComponents>
+			<RequireAuthComponents allowedRoles={[`admin`]}>
+				<ConfirmButton actionHandler={handlePostLock}>
+					Lock 1d
+				</ConfirmButton>
+			</RequireAuthComponents>
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
 			<UserMinify user={post.author} />

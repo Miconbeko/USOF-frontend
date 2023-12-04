@@ -14,7 +14,7 @@ export default function RequireAuthComponents({
 	return (
 		<>
 			{(() => {
-				// if (authStatus === `loading`) return;
+				if (authStatus === `loading`) return;
 
 				if (authStatus === `idle`) {
 					if (!unauthOnly) return;

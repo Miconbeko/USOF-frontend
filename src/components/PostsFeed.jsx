@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import Post from "./Post";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAllPosts } from "../store/slices/postsSlice";
-import { nanoid } from "@reduxjs/toolkit";
 import Loading from "./Loading";
 
 export default function PostsFeed() {

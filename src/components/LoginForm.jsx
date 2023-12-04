@@ -6,7 +6,6 @@ import SubmitButton from "./SubmitButton";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, setCount } from "../store/slices/counterSlice";
 import {
 	fetchAuth,
 	getError,

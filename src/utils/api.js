@@ -31,6 +31,7 @@ api.routes = {
 	createAnswer: (id) => `/posts/${id}/comments`,
 	createComment: (id) => `/comments/${id}/comment`,
 	deletePost: (id) => `/posts/${id}`,
+	lockPost: (id) => `/posts/${id}/lock`,
 	userByToken: `/users/token`,
 };
 

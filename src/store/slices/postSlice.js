@@ -77,6 +77,18 @@ export const deletePost = createAsyncThunk(`post/delete`, async (params) => {
 	}
 });
 
+export const lockPost = createAsyncThunk(`post/lock`, async (params) => {
+	try {
+		const res = await api.post(api.routes.lockPost(params.id), {
+			timer: params.timer,
+		});
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
+
 export const postSlice = createSlice({
 	name: `post`,
 	initialState,
@@ -133,6 +145,25 @@ export const postSlice = createSlice({
 				state.post = {};
 			})
 			.addCase(deletePost.rejected, (state, action) => {
+				state.status = `failed`;
+				state.error = action.error.message;
+			})
+
+			.addCase(lockPost.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(lockPost.fulfilled, (state, action) => {
+				const comments = state.post.comments;
+				const author = state.post.author;
+
+				state.status = `succeeded`;
+				state.post = action.payload.post;
+				state.post.lock = action.payload.lock;
+				state.post.comments = comments;
+				state.post.author = author;
+			})
+			.addCase(lockPost.rejected, (state, action) => {
 				state.status = `failed`;
 				state.error = action.error.message;
 			});
