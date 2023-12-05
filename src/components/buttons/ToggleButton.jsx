@@ -39,14 +39,17 @@ export default function ToggleButton({
 		<>
 			{state !== 0 ? (
 				<button
+					type="button"
 					onClick={handleAsk}
-					className={"bg-amber-600 hover:bg-amber-500"}
+					// className={"bg-amber-600 hover:bg-amber-500"}
 					disabled={locked}
+					className={"toggled-button"}
+					data-toggled
 				>
 					{children}
 				</button>
 			) : (
-				<button onClick={handleAsk} disabled={locked}>
+				<button type="button" onClick={handleAsk} disabled={locked}>
 					{children}
 				</button>
 			)}

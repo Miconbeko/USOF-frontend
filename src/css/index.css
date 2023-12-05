@@ -62,12 +62,22 @@
         @apply bg-sky-400 hover:bg-sky-500 border-2 rounded  disabled:bg-sky-400/30
     }
 
+    /*button[data-toggled] {*/
+    /*    @apply bg-amber-600 hover:bg-amber-500*/
+    /*}*/
+
     a {
         @apply text-blue-700 visited:text-blue-700/50
     }
 
     main {
         @apply py-10 mb-[-1.5rem] min-h-full
+    }
+}
+
+@layer components {
+    button.toggled-button {
+        @apply bg-amber-600 hover:bg-amber-500
     }
 }
 

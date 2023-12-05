@@ -4,16 +4,22 @@ import Post from "../Post";
 import Loading from "../Loading";
 import SearchForm from "../forms/SearchForm";
 import { nanoid } from "@reduxjs/toolkit";
+import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
 
 export default function PostsFeed() {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [errMsg, setErrMsg] = useState(``);
 	const [refresh, setRefresh] = useState(null);
+
 	const [search, setSearch] = useState(``);
+	const [checkboxes, setCheckboxes] = useState([]);
+	const [sort, setSort] = useState(`Newest`);
 
 	const handleSearch = async (values) => {
 		setSearch(values.search);
+		setCheckboxes(values.checkboxes);
+		setSort(values.sort);
 		setRefresh(nanoid());
 	};
 
@@ -22,7 +28,8 @@ export default function PostsFeed() {
 			try {
 				const res = await api.get(api.routes.allPosts, {
 					params: {
-						filter: `search[${search}]`,
+						filter: createFilterQuery({ search, checkboxes }),
+						sort: createSortQuery({ sort }),
 					},
 				});
 
