@@ -4,7 +4,7 @@ import Post from "../Post";
 import Loading from "../Loading";
 import { nanoid } from "@reduxjs/toolkit";
 import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
-import PostsSearchForm from "../forms/PostsSearchForm";
+import PostsSearchForm from "../forms/search/PostsSearchForm";
 
 export default function PostsFeed() {
 	const [posts, setPosts] = useState([]);

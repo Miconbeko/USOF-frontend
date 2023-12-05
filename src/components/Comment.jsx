@@ -5,22 +5,23 @@ import CommentForm from "./forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
 import ToggleButton from "./buttons/ToggleButton";
 import { useSelector } from "react-redux";
-import { getPostLock } from "../store/slices/postSlice";
+import { deletePost, getPostLock } from "../store/slices/postSlice";
 import RequireOwnerComponents from "./wrappers/RequireOwnerComponents";
+import api from "../utils/api";
 
 export default function Comment({ comment, onCommentAdd }) {
 	const postLock = useSelector(getPostLock);
-	const [showCommnetForm, setShowCommentForm] = useState(false);
+	const [showCommentForm, setShowCommentForm] = useState(false);
 	const [edit, setEdit] = useState(false);
 
 	const handleShowAddForm = async () => {
-		setEdit(true);
-		setShowCommentForm(!showCommnetForm);
+		setEdit(false);
+		setShowCommentForm(!showCommentForm);
 	};
 
 	const handleShowEditForm = async () => {
 		setEdit(true);
-		setShowCommentForm(!showCommnetForm);
+		setShowCommentForm(!showCommentForm);
 	};
 
 	const handleComment = async () => {
@@ -28,8 +29,18 @@ export default function Comment({ comment, onCommentAdd }) {
 		if (onCommentAdd) onCommentAdd();
 	};
 
-	return (
-		<div>
+	const handleCommentDelete = async () => {
+		try {
+			const res = await api.delete(api.routes.deleteComment(comment.id));
+
+			if (onCommentAdd) onCommentAdd();
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const commentContent = (
+		<>
 			<p>{comment.content}</p>
 			<RequireAuthComponents>
 				<ToggleButton
@@ -41,9 +52,15 @@ export default function Comment({ comment, onCommentAdd }) {
 				</ToggleButton>
 			</RequireAuthComponents>
 			<RequireOwnerComponents
-				userId={comment.author.id}
+				userId={comment?.author?.id}
 				allowedRoles={[`admin`]}
 			>
+				<ToggleButton
+					actionHandler={handleCommentDelete}
+					locked={Boolean(postLock)}
+				>
+					Delete
+				</ToggleButton>
 				<ToggleButton
 					actionHandler={handleShowEditForm}
 					withoutWarning
@@ -53,7 +70,7 @@ export default function Comment({ comment, onCommentAdd }) {
 				</ToggleButton>
 			</RequireOwnerComponents>
 			<UserMinify user={comment.author} />
-			{showCommnetForm ? (
+			{showCommentForm ? (
 				edit ? (
 					<CommentForm
 						commentId={comment.id}
@@ -68,6 +85,18 @@ export default function Comment({ comment, onCommentAdd }) {
 				)
 			) : null}
 			<br />
-		</div>
+		</>
+	);
+
+	const deletedCommentContent = (
+		<>
+			<p>[Deleted comment]</p>
+			<UserMinify user={comment.author} />
+			<br />
+		</>
+	);
+
+	return (
+		<div>{comment.content ? commentContent : deletedCommentContent}</div>
 	);
 }

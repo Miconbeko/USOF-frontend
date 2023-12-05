@@ -3,7 +3,7 @@ import api from "../../utils/api";
 import Loading from "../Loading";
 import Post from "../Post";
 import UserMinify from "../UserMinify";
-import UsersSearchForm from "../forms/UsersSearchForm";
+import UsersSearchForm from "../forms/search/UsersSearchForm";
 import { nanoid } from "@reduxjs/toolkit";
 import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
 

@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from "formik";
-import SubmitButton from "../buttons/SubmitButton";
-import Dropdown from "../Dropdown";
+import SubmitButton from "../../buttons/SubmitButton";
+import Dropdown from "../../Dropdown";
 
 export default function PostsSearchForm({ onSubmit }) {
 	const handleSearch = async (values) => {
