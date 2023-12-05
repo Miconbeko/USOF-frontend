@@ -2,16 +2,29 @@ import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import Post from "../Post";
 import Loading from "../Loading";
+import SearchForm from "../forms/SearchForm";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function PostsFeed() {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [errMsg, setErrMsg] = useState(``);
+	const [refresh, setRefresh] = useState(null);
+	const [search, setSearch] = useState(``);
+
+	const handleSearch = async (values) => {
+		setSearch(values.search);
+		setRefresh(nanoid());
+	};
 
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				const res = await api.get(api.routes.allPosts);
+				const res = await api.get(api.routes.allPosts, {
+					params: {
+						filter: `search[${search}]`,
+					},
+				});
 
 				const posts = res.data.posts;
 				const uniqueUsersId = [
@@ -47,22 +60,27 @@ export default function PostsFeed() {
 		};
 
 		fetchPosts();
-	}, []);
+	}, [refresh]);
 
 	return (
 		<>
 			Feed: <br />
+			<SearchForm type="posts" onSubmit={handleSearch} />
 			{(() => {
 				if (loading) return <Loading />;
 				if (errMsg) return <p>{errMsg}</p>;
 				if (posts && posts.length)
-					return posts.map((post) => (
-						<div key={post.id}>
-							<Post post={post} />
-							<br />
-							<br />
-						</div>
-					));
+					return (
+						<>
+							{posts.map((post) => (
+								<div key={post.id}>
+									<Post post={post} />
+									<br />
+									<br />
+								</div>
+							))}
+						</>
+					);
 				return <p>There is no posts :( </p>;
 			})()}
 		</>
