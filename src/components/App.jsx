@@ -19,6 +19,7 @@ import {
 import RequireAuthRoutes from "./wrappers/RequireAuthRoutes";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UsersFeed from "./feeds/UsersFeed";
+import CategoriesFeed from "./feeds/CategoriesFeed";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -41,6 +42,7 @@ export default function App() {
 				<Route path="/" element={<Layout />}>
 					<Route path="/" element={<MainPage />} />
 					<Route path="/users" element={<UsersFeed />} />
+					<Route path="/categories" element={<CategoriesFeed />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
 					<Route element={<RequireAuthRoutes />}>

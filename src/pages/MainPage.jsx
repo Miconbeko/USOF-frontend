@@ -18,7 +18,8 @@ export default function MainPage() {
 				<Link to={`/user/${auth?.user?.login}`}>Profile</Link> <br />
 				<Link to={`/createPost`}>Create post </Link> <br />
 			</RequireAuthComponents>
-			<Link to={`/users`}>All users</Link> <br /> <br />
+			<Link to={`/users`}>All users</Link> <br />
+			<Link to={`/categories`}>All categories</Link> <br /> <br />
 			<PostsFeed />
 		</>
 	);
