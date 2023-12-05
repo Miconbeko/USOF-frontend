@@ -20,21 +20,23 @@ export default function PostsFeed() {
 					),
 				];
 
-				try {
-					const res = await api.get(api.routes.usersByIds, {
-						params: {
-							ids: uniqueUsersId.join(`,`),
-						},
-					});
-					const users = res.data.users;
+				if (uniqueUsersId.length) {
+					try {
+						const res = await api.get(api.routes.usersByIds, {
+							params: {
+								ids: uniqueUsersId.join(`,`),
+							},
+						});
+						const users = res.data.users;
 
-					for (const post of posts) {
-						post.author = users.find(
-							(user) => post.userId === user.id,
-						);
+						for (const post of posts) {
+							post.author = users.find(
+								(user) => post.userId === user.id,
+							);
+						}
+					} catch (err) {
+						api.catcher(err);
 					}
-				} catch (err) {
-					api.catcher(err);
 				}
 
 				setPosts(posts);

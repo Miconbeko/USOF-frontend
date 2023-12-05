@@ -3,7 +3,7 @@ import RequireAuthComponents from "./wrappers/RequireAuthComponents";
 import { useState } from "react";
 import CommentForm from "./forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
-import ConfirmButton from "./buttons/ConfirmButton";
+import ToggleButton from "./buttons/ToggleButton";
 import { useSelector } from "react-redux";
 import { getPostLock } from "../store/slices/postSlice";
 
@@ -24,13 +24,13 @@ export default function Comment({ comment, onCommentAdd }) {
 		<div>
 			<p>{comment.content}</p>
 			<RequireAuthComponents>
-				<ConfirmButton
+				<ToggleButton
 					actionHandler={handleShowForm}
 					withoutWarning
 					locked={Boolean(postLock)}
 				>
 					Comment
-				</ConfirmButton>
+				</ToggleButton>
 			</RequireAuthComponents>
 			<UserMinify user={comment.author} />
 			{showCommnetForm ? (

@@ -20,7 +20,7 @@ import UserMinify from "../components/UserMinify";
 import CommentForm from "../components/forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
 import RequireOwnerComponents from "../components/wrappers/RequireOwnerComponents";
-import ConfirmButton from "../components/buttons/ConfirmButton";
+import ToggleButton from "../components/buttons/ToggleButton";
 import RequireAuthComponents from "../components/wrappers/RequireAuthComponents";
 import PostForm from "../components/forms/PostForm";
 import Comment from "../components/Comment";
@@ -97,28 +97,28 @@ export default function PostPage() {
 				userId={post.userId}
 				allowedRoles={[`admin`]}
 			>
-				<ConfirmButton
+				<ToggleButton
 					actionHandler={handlePostDelete}
 					locked={Boolean(postLock)}
 				>
 					Delete post
-				</ConfirmButton>
-				<ConfirmButton
+				</ToggleButton>
+				<ToggleButton
 					actionHandler={handlePostEdit}
 					locked={Boolean(postLock)}
 				>
 					Edit post
-				</ConfirmButton>
+				</ToggleButton>
 			</RequireOwnerComponents>
 			<RequireAuthComponents allowedRoles={[`admin`]}>
 				{postLock ? (
-					<ConfirmButton actionHandler={handlePostUnlock}>
+					<ToggleButton actionHandler={handlePostUnlock}>
 						Unlock
-					</ConfirmButton>
+					</ToggleButton>
 				) : (
-					<ConfirmButton actionHandler={handlePostLock}>
+					<ToggleButton actionHandler={handlePostLock}>
 						Lock 1d
-					</ConfirmButton>
+					</ToggleButton>
 				)}
 			</RequireAuthComponents>
 			<h2>{post.title}</h2>

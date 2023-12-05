@@ -19,6 +19,7 @@ api.routes = {
 	register: `/auth/register`,
 	login: `/auth/login`,
 	logout: `/auth/logout`,
+	fullLogout: `/auth/logout/all`,
 	allPosts: `/posts`,
 	allUsers: `/users`,
 	postById: (id) => `/posts/${id}`,
@@ -58,10 +59,12 @@ api.catcher = (err, fn = console.error) => {
 		// The request was made but no response was received
 		// `err.request` is an instance of XMLHttpRequest in the browser and an instance of
 		// http.ClientRequest in node.js
+		console.error(err);
 		fn(`Server didn't respond`);
 		// console.log(err.request);
 	} else {
 		// Something happened in setting up the request that triggered an Error
+		console.error(err);
 		fn(`Internal server error`);
 		// console.log('Error', err.message);
 	}

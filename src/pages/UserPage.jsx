@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	selectUser,
@@ -10,14 +10,27 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import RequireOwnerComponents from "../components/wrappers/RequireOwnerComponents";
 import LogoutButton from "../components/buttons/LogoutButton";
+import { fullLogout, logout } from "../store/slices/authSlice";
+import ToggleButton from "../components/buttons/ToggleButton";
 
 export default function UserPage() {
 	const user = useSelector(selectUser);
 	const userStatus = useSelector(getStatus);
 	const userError = useSelector(getError);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const { login } = useParams();
+
+	const handleLogout = () => {
+		dispatch(logout());
+		navigate(`/`);
+	};
+
+	const handleFullogout = () => {
+		dispatch(fullLogout());
+		navigate(`/`);
+	};
 
 	useEffect(() => {
 		dispatch(fetchUser({ login }));
@@ -35,7 +48,11 @@ export default function UserPage() {
 			<p>Rating: {user.rating}</p>
 			<p>Role: {user.role}</p>
 			<RequireOwnerComponents userId={user.id}>
-				<LogoutButton>Logout</LogoutButton> <br />
+				<button onClick={handleLogout}>Logout</button> <br />
+				<ToggleButton actionHandler={handleFullogout}>
+					Full logout
+				</ToggleButton>
+				<br />
 			</RequireOwnerComponents>
 		</>
 	);

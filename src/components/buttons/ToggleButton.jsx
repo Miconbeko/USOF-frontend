@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { deletePost } from "../../store/slices/postSlice";
 import { useState } from "react";
 
-export default function ConfirmButton({
+export default function ToggleButton({
 	children,
 	actionHandler,
 	undoHandler = actionHandler,

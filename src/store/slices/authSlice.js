@@ -60,6 +60,16 @@ export const logout = createAsyncThunk(`auth/logout`, async () => {
 	}
 });
 
+export const fullLogout = createAsyncThunk(`auth/fullLogout`, async () => {
+	try {
+		const res = api.delete(api.routes.fullLogout);
+
+		return res.data;
+	} catch (err) {
+		api.catcher(err, api.errorHandlers.rethrow);
+	}
+});
+
 export const authSlice = createSlice({
 	name: `auth`,
 	initialState,
@@ -114,6 +124,21 @@ export const authSlice = createSlice({
 				window.localStorage.removeItem(`token`);
 			})
 			.addCase(logout.rejected, (state, action) => {
+				state.status = `idle`;
+				state.auth = {};
+				window.localStorage.removeItem(`token`);
+			})
+
+			.addCase(fullLogout.pending, (state, action) => {
+				state.error = null;
+				state.status = `loading`;
+			})
+			.addCase(fullLogout.fulfilled, (state, action) => {
+				state.status = `idle`;
+				state.auth = {};
+				window.localStorage.removeItem(`token`);
+			})
+			.addCase(fullLogout.rejected, (state, action) => {
 				state.status = `idle`;
 				state.auth = {};
 				window.localStorage.removeItem(`token`);
