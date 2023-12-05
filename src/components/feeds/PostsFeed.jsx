@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import Post from "../Post";
 import Loading from "../Loading";
-import SearchForm from "../forms/SearchForm";
 import { nanoid } from "@reduxjs/toolkit";
 import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
+import PostsSearchForm from "../forms/PostsSearchForm";
 
 export default function PostsFeed() {
 	const [posts, setPosts] = useState([]);
@@ -72,7 +72,7 @@ export default function PostsFeed() {
 	return (
 		<>
 			Feed: <br />
-			<SearchForm type="posts" onSubmit={handleSearch} />
+			<PostsSearchForm onSubmit={handleSearch} />
 			{(() => {
 				if (loading) return <Loading />;
 				if (errMsg) return <p>{errMsg}</p>;

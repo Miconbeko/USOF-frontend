@@ -28,6 +28,8 @@ export function createSortQuery({ sort }) {
 	if (sort === `Oldest`) options.push(`date[asc]`);
 	if (sort === `Most rated`) options.push(`rating[desc]`);
 	if (sort === `Least rated`) options.push(`rating[asc]`);
+	if (sort === `A->Z`) options.push(`name[asc]`);
+	if (sort === `Z->A`) options.push(`name[desc]`);
 
 	str = options.join(`,`);
 
