@@ -21,6 +21,7 @@ export default function CommentForm({
 	postId,
 	commentId,
 	onSubmit,
+	edited = false,
 	locked = false,
 }) {
 	const auth = useSelector(selectAuth);
@@ -35,7 +36,9 @@ export default function CommentForm({
 		try {
 			let res;
 
-			if (Number.isFinite(commentId))
+			if (edited && Number.isFinite(commentId)) {
+				res = await api.put(api.routes.editComment(commentId), values);
+			} else if (Number.isFinite(commentId))
 				res = await api.post(
 					api.routes.createComment(commentId),
 					values,
@@ -72,8 +75,12 @@ export default function CommentForm({
 				<SubmitButton
 					value={
 						Number.isFinite(commentId)
-							? "Add comment"
-							: "Post an answer"
+							? edited
+								? "Edit comment"
+								: "Add comment"
+							: edited
+							  ? "Edit answer"
+							  : "Post an answer"
 					}
 				/>
 			</Form>

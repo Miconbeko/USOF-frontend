@@ -106,6 +106,7 @@ export default function PostPage() {
 				<ToggleButton
 					actionHandler={handlePostEdit}
 					locked={Boolean(postLock)}
+					withoutWarning
 				>
 					Edit post
 				</ToggleButton>
