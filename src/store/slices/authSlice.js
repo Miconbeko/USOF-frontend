@@ -52,7 +52,7 @@ export const getUserCheckToken = createAsyncThunk(
 
 export const logout = createAsyncThunk(`auth/logout`, async () => {
 	try {
-		const res = api.delete(api.routes.logout);
+		const res = await api.delete(api.routes.logout);
 
 		return res.data;
 	} catch (err) {
@@ -62,7 +62,7 @@ export const logout = createAsyncThunk(`auth/logout`, async () => {
 
 export const fullLogout = createAsyncThunk(`auth/fullLogout`, async () => {
 	try {
-		const res = api.delete(api.routes.fullLogout);
+		const res = await api.delete(api.routes.fullLogout);
 
 		return res.data;
 	} catch (err) {
