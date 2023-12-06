@@ -67,7 +67,7 @@ export const createPost = createAsyncThunk(`post/create`, async (params) => {
 	try {
 		const res = await api.post(api.routes.createPost, {
 			...params,
-			categories: [1, 2],
+			// categories: [1, 2],
 		});
 
 		return res.data;

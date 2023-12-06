@@ -6,7 +6,7 @@ import CategoriesSearchForm from "../forms/search/CategoriesSearchForm";
 import { nanoid } from "@reduxjs/toolkit";
 import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
 
-export default function CategoriesFeed() {
+export default function CategoriesFeed({ onCategoryClick }) {
 	const [categories, setCategories] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [errMsg, setErrMsg] = useState(``);
@@ -52,6 +52,15 @@ export default function CategoriesFeed() {
 					return categories.map((category) => (
 						<div key={category.id}>
 							<CategoryMinify category={category} />
+							{onCategoryClick ? (
+								<button
+									onClick={() => {
+										onCategoryClick(category);
+									}}
+								>
+									Add
+								</button>
+							) : null}
 							<br />
 						</div>
 					));

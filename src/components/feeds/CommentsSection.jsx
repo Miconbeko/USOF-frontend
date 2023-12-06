@@ -16,7 +16,7 @@ export default function CommentsSection({
 
 	return (
 		<>
-			{filteredComments.map((comment) => (
+			{filteredComments?.map((comment) => (
 				<div key={comment.id}>
 					<Comment comment={comment} onCommentAdd={onCommentAdd} />
 					<div className={"ml-4"}>

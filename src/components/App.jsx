@@ -45,9 +45,9 @@ export default function App() {
 					<Route path="/categories" element={<CategoriesFeed />} />
 					<Route path="/login" element={<LoginForm />} />
 					<Route path="/register" element={<RegisterForm />} />
-					<Route element={<RequireAuthRoutes />}>
-						<Route path="/createPost" element={<PostForm />} />
-					</Route>
+					{/*<Route element={<RequireAuthRoutes />}>*/}
+					<Route path="/createPost" element={<PostForm />} />
+					{/*</Route>*/}
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
 					<Route path="/unknownUser" element={<UnknownRoutePage />} />
