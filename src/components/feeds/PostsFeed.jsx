@@ -94,7 +94,12 @@ export default function PostsFeed() {
 					return (
 						<>
 							{posts.map((post) => (
-								<div key={post.id}>
+								<div
+									key={post.id}
+									className={
+										"mt-4 p-4 block border-2 border-teal-600 rounded"
+									}
+								>
 									<Post post={post} />
 									<br />
 									<br />

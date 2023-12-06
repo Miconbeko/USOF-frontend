@@ -17,7 +17,10 @@ export default function CommentsSection({
 	return (
 		<>
 			{filteredComments?.map((comment) => (
-				<div key={comment.id}>
+				<div
+					className={"pl-4 border-l-2 border-teal-600"}
+					key={comment.id}
+				>
 					<Comment comment={comment} onCommentAdd={onCommentAdd} />
 					<div className={"ml-4"}>
 						<CommentsSection

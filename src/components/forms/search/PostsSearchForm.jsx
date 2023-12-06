@@ -40,6 +40,7 @@ export default function PostsSearchForm({ onSubmit, paginationData }) {
 						No comments
 					</label>
 					<Dropdown name="sort" options={postsSortOptions} />
+					<br />
 					<PaginationButtons
 						paginationData={paginationData}
 						onClick={toNewPage}

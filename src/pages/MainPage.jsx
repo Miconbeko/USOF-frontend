@@ -10,16 +10,16 @@ export default function MainPage() {
 
 	return (
 		<>
-			<RequireAuthComponents unauthOnly>
-				<Link to={`/login`}>Log in</Link> <br />
-				<Link to={`/register`}>Sign up</Link> <br />
-			</RequireAuthComponents>
-			<RequireAuthComponents>
-				<Link to={`/user/${auth?.user?.login}`}>Profile</Link> <br />
-				<Link to={`/createPost`}>Create post </Link> <br />
-			</RequireAuthComponents>
-			<Link to={`/users`}>All users</Link> <br />
-			<Link to={`/categories`}>All categories</Link> <br /> <br />
+			{/*<RequireAuthComponents unauthOnly>*/}
+			{/*	<Link to={`/login`}>Log in</Link> <br />*/}
+			{/*	<Link to={`/register`}>Sign up</Link> <br />*/}
+			{/*</RequireAuthComponents>*/}
+			{/*<RequireAuthComponents>*/}
+			{/*	<Link to={`/user/${auth?.user?.login}`}>Profile</Link> <br />*/}
+			{/*	<Link to={`/createPost`}>Create post </Link> <br />*/}
+			{/*</RequireAuthComponents>*/}
+			{/*<Link to={`/users`}>All users</Link> <br />*/}
+			{/*<Link to={`/categories`}>All categories</Link> <br /> <br />*/}
 			<PostsFeed />
 		</>
 	);

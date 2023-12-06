@@ -66,9 +66,6 @@
     /*    @apply bg-amber-600 hover:bg-amber-500*/
     /*}*/
 
-    a {
-        @apply text-blue-700 visited:text-blue-700/50
-    }
 
     main {
         @apply py-10 mb-[-1.5rem] min-h-full
@@ -84,3 +81,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+    @apply text-blue-700 visited:text-blue-700/50
+}

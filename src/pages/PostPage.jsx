@@ -163,18 +163,20 @@ export default function PostPage() {
 					</ToggleButton>
 				)}
 			</RequireAuthComponents>
-			<h2>{post.title}</h2>
-			<p>{post.content}</p> <br />
-			<UserMinify user={post.author} />
-			<RequireAuthComponents>
-				<Marks
-					mark={post?.Marks?.at(0)?.type}
-					onSetLike={handleSetLike}
-					onSetDislike={handleSetDislike}
-					onUndoLike={handleUndoLike}
-					onUndoDislike={handleUndoDislike}
-				/>
-			</RequireAuthComponents>
+			<div className={"mt-2 p-4 border-2 border-teal-900 rounded"}>
+				<h2>{post.title}</h2>
+				<p>{post.content}</p> <br />
+				<UserMinify user={post.author} />
+				<RequireAuthComponents>
+					<Marks
+						mark={post?.Marks?.at(0)?.type}
+						onSetLike={handleSetLike}
+						onSetDislike={handleSetDislike}
+						onUndoLike={handleUndoLike}
+						onUndoDislike={handleUndoDislike}
+					/>
+				</RequireAuthComponents>
+			</div>
 			<br />
 			<div>
 				<h3>Answers:</h3>
