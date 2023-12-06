@@ -3,7 +3,11 @@ import api from "../../utils/api";
 import Post from "../Post";
 import Loading from "../Loading";
 import { nanoid } from "@reduxjs/toolkit";
-import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
+import {
+	createFilterQuery,
+	createPageQuery,
+	createSortQuery,
+} from "../../utils/createQueries";
 import PostsSearchForm from "../forms/search/PostsSearchForm";
 
 export default function PostsFeed() {
@@ -15,11 +19,15 @@ export default function PostsFeed() {
 	const [search, setSearch] = useState(``);
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [sort, setSort] = useState(`Newest`);
+	const [page, setPage] = useState(1);
+
+	const [paginationData, setPaginationData] = useState({});
 
 	const handleSearch = async (values) => {
 		setSearch(values.search);
 		setCheckboxes(values.checkboxes);
 		setSort(values.sort);
+		setPage(values.page);
 		setRefresh(nanoid());
 	};
 
@@ -30,8 +38,11 @@ export default function PostsFeed() {
 					params: {
 						filter: createFilterQuery({ search, checkboxes }),
 						sort: createSortQuery({ sort }),
+						page: createPageQuery({ page }),
 					},
 				});
+
+				setPaginationData(res.data.pagination);
 
 				const posts = res.data.posts;
 				const uniqueUsersId = [
@@ -72,7 +83,10 @@ export default function PostsFeed() {
 	return (
 		<>
 			Feed: <br />
-			<PostsSearchForm onSubmit={handleSearch} />
+			<PostsSearchForm
+				paginationData={paginationData}
+				onSubmit={handleSearch}
+			/>
 			{(() => {
 				if (loading) return <Loading />;
 				if (errMsg) return <p>{errMsg}</p>;

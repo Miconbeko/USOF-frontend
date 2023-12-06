@@ -36,3 +36,7 @@ export function createSortQuery({ sort }) {
 	if (str) return str;
 	return null;
 }
+
+export function createPageQuery({ page }) {
+	return page;
+}

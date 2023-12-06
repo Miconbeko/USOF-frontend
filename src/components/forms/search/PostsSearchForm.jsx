@@ -1,10 +1,18 @@
 import { Field, Form, Formik } from "formik";
 import SubmitButton from "../../buttons/SubmitButton";
 import Dropdown from "../../Dropdown";
+import { useState } from "react";
+import PaginationButtons from "../../PaginationButtons";
 
-export default function PostsSearchForm({ onSubmit }) {
+export default function PostsSearchForm({ onSubmit, paginationData }) {
+	const [page, setPage] = useState(paginationData?.currentPage);
+
 	const handleSearch = async (values) => {
-		if (onSubmit) onSubmit(values);
+		if (onSubmit) onSubmit({ ...values, page });
+	};
+
+	const toNewPage = async (page) => {
+		setPage(page);
 	};
 
 	const postsSortOptions = [`Newest`, `Oldest`, `Most rated`, `Least rated`];
@@ -32,6 +40,10 @@ export default function PostsSearchForm({ onSubmit }) {
 						No comments
 					</label>
 					<Dropdown name="sort" options={postsSortOptions} />
+					<PaginationButtons
+						paginationData={paginationData}
+						onClick={toNewPage}
+					/>
 				</Form>
 			</Formik>
 		</>
