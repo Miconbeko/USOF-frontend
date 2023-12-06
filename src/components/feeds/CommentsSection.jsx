@@ -7,7 +7,7 @@ export default function CommentsSection({
 	onCommentAdd,
 }) {
 	const comments = useSelector(selectPost).comments;
-	const filteredComments = comments.filter(
+	const filteredComments = comments?.filter(
 		(comment) => comment.commentId === parentCommentId,
 	);
 

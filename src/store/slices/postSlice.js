@@ -131,6 +131,20 @@ export const editPost = createAsyncThunk(`post/edit`, async (params) => {
 export const postSlice = createSlice({
 	name: `post`,
 	initialState,
+	reducers: {
+		setLike(state, action) {
+			if (!state.post.Marks.length) state.post.Marks.push({ type: `` });
+			state.post.Marks[0].type = `like`;
+		},
+		setDislike(state, action) {
+			if (!state.post.Marks.length) state.post.Marks.push({ type: `` });
+			state.post.Marks[0].type = `dislike`;
+		},
+		deleteMark(state, action) {
+			if (!state.post.Marks.length) state.post.Marks.push({ type: `` });
+			state.post.Marks[0].type = ``;
+		},
+	},
 	extraReducers(builder) {
 		builder
 			.addCase(fetchPost.pending, (state, action) => {
@@ -246,5 +260,7 @@ export const selectPost = (state) => state.post.post;
 export const getPostLock = (state) => state.post.post.lock;
 export const getStatus = (state) => state.post.status;
 export const getError = (state) => state.post.error;
+
+export const { setLike, setDislike, deleteMark } = postSlice.actions;
 
 export default postSlice.reducer;

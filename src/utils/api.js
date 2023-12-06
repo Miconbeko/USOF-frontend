@@ -39,6 +39,14 @@ api.routes = {
 	lockPost: (id) => `/posts/${id}/lock`,
 	unlockPost: (id) => `/posts/${id}/lock`,
 	userByToken: `/users/token`,
+	setPostLike: (id) => `/posts/${id}/like`,
+	undoPostLike: (id) => `/posts/${id}/like`,
+	setPostDislike: (id) => `/posts/${id}/dislike`,
+	undoPostDislike: (id) => `/posts/${id}/dislike`,
+	setCommentLike: (id) => `/comments/${id}/like`,
+	undoCommentLike: (id) => `/comments/${id}/like`,
+	setCommentDislike: (id) => `/comments/${id}/dislike`,
+	undoCommentDislike: (id) => `/comments/${id}/dislike`,
 };
 
 const rethrow = (msg) => {

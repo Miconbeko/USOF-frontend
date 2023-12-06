@@ -5,14 +5,16 @@ import CommentForm from "./forms/CommentForm";
 import { nanoid } from "@reduxjs/toolkit";
 import ToggleButton from "./buttons/ToggleButton";
 import { useSelector } from "react-redux";
-import { deletePost, getPostLock } from "../store/slices/postSlice";
+import { getPostLock } from "../store/slices/postSlice";
 import RequireOwnerComponents from "./wrappers/RequireOwnerComponents";
 import api from "../utils/api";
+import Marks from "./Marks";
 
 export default function Comment({ comment, onCommentAdd }) {
 	const postLock = useSelector(getPostLock);
 	const [showCommentForm, setShowCommentForm] = useState(false);
 	const [edit, setEdit] = useState(false);
+	const [mark, setMark] = useState(comment?.Marks?.at(0)?.type);
 
 	const handleShowAddForm = async () => {
 		setEdit(false);
@@ -34,6 +36,48 @@ export default function Comment({ comment, onCommentAdd }) {
 			const res = await api.delete(api.routes.deleteComment(comment.id));
 
 			if (onCommentAdd) onCommentAdd();
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleSetLike = async () => {
+		try {
+			const res = await api.post(api.routes.setCommentLike(comment.id));
+			setMark(`like`);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleUndoLike = async () => {
+		try {
+			const res = await api.delete(
+				api.routes.undoCommentLike(comment.id),
+			);
+			setMark(``);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleSetDislike = async () => {
+		try {
+			const res = await api.post(
+				api.routes.setCommentDislike(comment.id),
+			);
+			setMark(`dislike`);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleUndoDislike = async () => {
+		try {
+			const res = await api.delete(
+				api.routes.undoCommentDislike(comment.id),
+			);
+			setMark(``);
 		} catch (err) {
 			console.error(err);
 		}
@@ -70,6 +114,15 @@ export default function Comment({ comment, onCommentAdd }) {
 				</ToggleButton>
 			</RequireOwnerComponents>
 			<UserMinify user={comment.author} />
+			<RequireAuthComponents>
+				<Marks
+					mark={mark}
+					onSetLike={handleSetLike}
+					onSetDislike={handleSetDislike}
+					onUndoLike={handleUndoLike}
+					onUndoDislike={handleUndoDislike}
+				/>
+			</RequireAuthComponents>
 			{showCommentForm ? (
 				edit ? (
 					<CommentForm

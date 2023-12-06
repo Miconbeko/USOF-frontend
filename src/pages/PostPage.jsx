@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+	deleteMark,
 	deletePost,
 	fetchComments,
 	fetchPost,
@@ -12,6 +13,8 @@ import {
 	lockPost,
 	postLock,
 	selectPost,
+	setDislike,
+	setLike,
 	unlockPost,
 } from "../store/slices/postSlice";
 import { useEffect, useState } from "react";
@@ -25,6 +28,8 @@ import RequireAuthComponents from "../components/wrappers/RequireAuthComponents"
 import PostForm from "../components/forms/PostForm";
 import Comment from "../components/Comment";
 import CommentsSection from "../components/feeds/CommentsSection";
+import api from "../utils/api";
+import Marks from "../components/Marks";
 
 export default function PostPage() {
 	const post = useSelector(selectPost);
@@ -76,6 +81,42 @@ export default function PostPage() {
 		setShowEditForm(!showEditForm);
 	};
 
+	const handleSetLike = async () => {
+		try {
+			const res = await api.post(api.routes.setPostLike(post.id));
+			dispatch(setLike());
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleUndoLike = async () => {
+		try {
+			const res = await api.delete(api.routes.undoPostLike(post.id));
+			dispatch(deleteMark());
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleSetDislike = async () => {
+		try {
+			const res = await api.post(api.routes.setPostDislike(post.id));
+			dispatch(setDislike());
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const handleUndoDislike = async () => {
+		try {
+			const res = await api.delete(api.routes.undoPostDislike(post.id));
+			dispatch(deleteMark());
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	const lockMessage = (
 		<>
 			<p>This post is locked by BY:</p>
@@ -125,6 +166,15 @@ export default function PostPage() {
 			<h2>{post.title}</h2>
 			<p>{post.content}</p> <br />
 			<UserMinify user={post.author} />
+			<RequireAuthComponents>
+				<Marks
+					mark={post?.Marks?.at(0)?.type}
+					onSetLike={handleSetLike}
+					onSetDislike={handleSetDislike}
+					onUndoLike={handleUndoLike}
+					onUndoDislike={handleUndoDislike}
+				/>
+			</RequireAuthComponents>
 			<br />
 			<div>
 				<h3>Answers:</h3>
