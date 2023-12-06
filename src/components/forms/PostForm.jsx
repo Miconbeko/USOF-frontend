@@ -44,9 +44,6 @@ export default function PostForm({ edited = false, onSubmit, locked = false }) {
 			const categoriesIds = [
 				...categories.map((category) => category.id),
 			];
-			console.log(categories);
-			console.log(categoriesIds);
-			console.log(values);
 			const payload = await dispatch(
 				createPost({ ...values, categories: categoriesIds }),
 			).unwrap();
@@ -62,7 +59,6 @@ export default function PostForm({ edited = false, onSubmit, locked = false }) {
 	};
 
 	const handleAddCategories = async (newValues) => {
-		console.error(newValues);
 		setCategories(newValues);
 	};
 

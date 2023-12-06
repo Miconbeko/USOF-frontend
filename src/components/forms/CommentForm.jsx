@@ -30,6 +30,7 @@ export default function CommentForm({
 	const navigate = useNavigate();
 
 	const [errMsg, setErrMsg] = useState(``);
+	const [comment, setComment] = useState(``);
 	const inputRef = useRef(null);
 
 	const handleComment = async (values) => {
@@ -52,6 +53,20 @@ export default function CommentForm({
 	};
 
 	useEffect(() => {
+		const fetchComment = async () => {
+			try {
+				const res = await api.get(api.routes.commentById(commentId));
+
+				setComment(res.data.comment.content);
+			} catch (err) {
+				api.catcher(err);
+			}
+		};
+
+		fetchComment();
+	}, []);
+
+	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.focus();
 		}
@@ -59,7 +74,8 @@ export default function CommentForm({
 
 	const form = (
 		<Formik
-			initialValues={{ content: `` }}
+			initialValues={{ content: comment }}
+			enableReinitialize={true}
 			validationSchema={commentSchema}
 			onSubmit={handleComment}
 		>

@@ -24,8 +24,8 @@ export default function RequireAuthComponents({
 
 				if (
 					!allowedRoles ||
-					allowedRoles.find(
-						(role) => roles[role] <= roles[auth.user.role],
+					allowedRoles?.find(
+						(role) => roles[role] <= roles[auth?.user?.role],
 					)
 				)
 					return children;

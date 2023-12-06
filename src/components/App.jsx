@@ -20,6 +20,7 @@ import RequireAuthRoutes from "./wrappers/RequireAuthRoutes";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UsersFeed from "./feeds/UsersFeed";
 import CategoriesFeed from "./feeds/CategoriesFeed";
+import VerifyEmailPage from "../pages/VerifyEmailPage";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -50,6 +51,10 @@ export default function App() {
 					{/*</Route>*/}
 					<Route path="/post/:id" element={<PostPage />} />
 					<Route path="/user/:login" element={<UserPage />} />
+					<Route
+						path="/verifyEmail/:token"
+						element={<VerifyEmailPage />}
+					/>
 					<Route path="/unknownUser" element={<UnknownRoutePage />} />
 					//TODO: make another page for unknown user
 					<Route path="/unauth" element={<UnauthorizedPage />} />
