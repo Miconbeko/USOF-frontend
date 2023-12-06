@@ -5,7 +5,11 @@ import Post from "../Post";
 import UserMinify from "../UserMinify";
 import UsersSearchForm from "../forms/search/UsersSearchForm";
 import { nanoid } from "@reduxjs/toolkit";
-import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
+import {
+	createFilterQuery,
+	createPageQuery,
+	createSortQuery,
+} from "../../utils/createQueries";
 
 export default function UsersFeed() {
 	const [users, setUsers] = useState([]);
@@ -16,12 +20,15 @@ export default function UsersFeed() {
 	const [search, setSearch] = useState(``);
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [sort, setSort] = useState(`Newest`);
+	const [page, setPage] = useState(1);
+
+	const [paginationData, setPaginationData] = useState({});
 
 	const handleSearch = async (values) => {
-		console.log(values);
 		setSearch(values.search);
 		setCheckboxes(values.checkboxes);
 		setSort(values.sort);
+		setPage(values.page);
 		setRefresh(nanoid());
 	};
 
@@ -32,9 +39,11 @@ export default function UsersFeed() {
 					params: {
 						filter: createFilterQuery({ search, checkboxes }),
 						sort: createSortQuery({ sort }),
+						page: createPageQuery({ page }),
 					},
 				});
 
+				setPaginationData(res.data.pagination);
 				setUsers(res.data.users);
 			} catch (err) {
 				api.catcher(err, setErrMsg);
@@ -48,7 +57,10 @@ export default function UsersFeed() {
 	return (
 		<>
 			Users: <br />
-			<UsersSearchForm onSubmit={handleSearch} />
+			<UsersSearchForm
+				paginationData={paginationData}
+				onSubmit={handleSearch}
+			/>
 			{(() => {
 				if (loading) return <Loading />;
 				if (errMsg) return <p>{errMsg}</p>;
