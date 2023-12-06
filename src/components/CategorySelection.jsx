@@ -11,12 +11,24 @@ export default function CategorySelection({ onCategoriesAdd }) {
 		onCategoriesAdd([...field, category]);
 	};
 
+	const handleRemoveCategory = (category) => {
+		const newArray = field.filter((selected) => selected !== category);
+
+		setField(newArray);
+		onCategoriesAdd(newArray);
+	};
+
 	return (
 		<>
 			<div>
-				<CategoriesFeed onCategoryClick={handleAddCategory} />
+				<CategoriesFeed
+					onCategoryAdd={handleAddCategory}
+					onCategoryRemove={handleRemoveCategory}
+					selectedCategories={field}
+				/>
 			</div>
 			<div>
+				Selected categories:
 				{field?.map((selectedCategory) => (
 					<div key={selectedCategory.id}>
 						<CategoryMinify category={selectedCategory} /> <br />

@@ -13,7 +13,11 @@ import RequireAuthComponents from "../wrappers/RequireAuthComponents";
 import ToggleButton from "../buttons/ToggleButton";
 import CategoryForm from "../forms/CategoryForm";
 
-export default function CategoriesFeed({ onCategoryClick }) {
+export default function CategoriesFeed({
+	onCategoryAdd,
+	onCategoryRemove,
+	selectedCategories,
+}) {
 	const [categories, setCategories] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [errMsg, setErrMsg] = useState(``);
@@ -85,14 +89,32 @@ export default function CategoriesFeed({ onCategoryClick }) {
 					return categories.map((category) => (
 						<div key={category.id}>
 							<CategoryMinify category={category} />
-							{onCategoryClick ? (
-								<button
-									onClick={() => {
-										onCategoryClick(category);
-									}}
-								>
-									Add
-								</button>
+							{onCategoryAdd && onCategoryRemove ? (
+								<>
+									<button
+										onClick={() => {
+											onCategoryAdd(category);
+										}}
+										disabled={selectedCategories.includes(
+											category,
+										)}
+									>
+										Add
+									</button>
+									<button
+										onClick={() => {
+											onCategoryRemove(category);
+										}}
+										disabled={
+											!selectedCategories.includes(
+												category,
+											)
+										}
+									>
+										Remove
+									</button>
+									<br />
+								</>
 							) : null}
 							<br />
 						</div>
