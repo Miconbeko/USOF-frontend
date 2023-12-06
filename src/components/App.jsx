@@ -21,6 +21,7 @@ import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UsersFeed from "./feeds/UsersFeed";
 import CategoriesFeed from "./feeds/CategoriesFeed";
 import VerifyEmailPage from "../pages/VerifyEmailPage";
+import VerifyDeletionPage from "../pages/VerifyDeletionPage";
 
 export default function App() {
 	const auth = useSelector(selectAuth);
@@ -54,6 +55,10 @@ export default function App() {
 					<Route
 						path="/verifyEmail/:token"
 						element={<VerifyEmailPage />}
+					/>
+					<Route
+						path="/verifyDeletion/:token"
+						element={<VerifyDeletionPage />}
 					/>
 					<Route path="/unknownUser" element={<UnknownRoutePage />} />
 					//TODO: make another page for unknown user

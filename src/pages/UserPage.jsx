@@ -10,7 +10,11 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import RequireOwnerComponents from "../components/wrappers/RequireOwnerComponents";
 import LogoutButton from "../components/buttons/LogoutButton";
-import { fullLogout, logout } from "../store/slices/authSlice";
+import {
+	fullLogout,
+	logout,
+	sendDeletionLink,
+} from "../store/slices/authSlice";
 import ToggleButton from "../components/buttons/ToggleButton";
 
 export default function UserPage() {
@@ -29,6 +33,11 @@ export default function UserPage() {
 
 	const handleFullogout = () => {
 		dispatch(fullLogout());
+		navigate(`/`);
+	};
+
+	const handleDeleteAccout = () => {
+		dispatch(sendDeletionLink());
 		navigate(`/`);
 	};
 
@@ -51,6 +60,9 @@ export default function UserPage() {
 				<button onClick={handleLogout}>Logout</button> <br />
 				<ToggleButton actionHandler={handleFullogout}>
 					Full logout
+				</ToggleButton>
+				<ToggleButton actionHandler={handleDeleteAccout}>
+					Delete account
 				</ToggleButton>
 				<br />
 			</RequireOwnerComponents>

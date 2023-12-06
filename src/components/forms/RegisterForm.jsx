@@ -34,7 +34,10 @@ export default function RegisterForm() {
 
 	const handleRegister = async (values) => {
 		try {
-			const res = await api.post(api.routes.register, values);
+			const res = await api.post(api.routes.register, {
+				...values,
+				redirectUrl: `http://localhost:3000/verifyEmail/:token`,
+			});
 
 			setSuccess(true);
 		} catch (err) {
@@ -47,7 +50,7 @@ export default function RegisterForm() {
 			<p>
 				Congratulations ! You account is registered. We sent you a
 				confirmation link. Click on it and login in your brand new
-				accout{" "}
+				accout
 			</p>
 		</div>
 	);

@@ -70,6 +70,36 @@ export const fullLogout = createAsyncThunk(`auth/fullLogout`, async () => {
 	}
 });
 
+export const sendDeletionLink = createAsyncThunk(
+	`auth/sendDeletionLink`,
+	async () => {
+		try {
+			const res = await api.post(api.routes.deleteUser(``), {
+				redirectUrl: `http://localhost:3000/verifyDeletion/:token`,
+			});
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, api.errorHandlers.rethrow);
+		}
+	},
+);
+
+export const deleteAccount = createAsyncThunk(
+	`auth/deleteAccount`,
+	async (params, { dispatch }) => {
+		try {
+			const res = await api.delete(api.routes.deleteUser(params.token));
+
+			dispatch(fullLogout());
+
+			return res.data;
+		} catch (err) {
+			api.catcher(err, api.errorHandlers.rethrow);
+		}
+	},
+);
+
 export const authSlice = createSlice({
 	name: `auth`,
 	initialState,

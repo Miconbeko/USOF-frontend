@@ -24,6 +24,7 @@ api.routes = {
 	allUsers: `/users`,
 	allCategories: `/categories`,
 	createCategory: `/categories`,
+	deleteUser: (token) => `/users/delete/${token}`,
 	categoryById: (id) => `/categories/${id}`,
 	postById: (id) => `/posts/${id}`,
 	editPost: (id) => `/posts/${id}`,
