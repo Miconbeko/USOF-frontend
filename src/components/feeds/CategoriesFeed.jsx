@@ -4,7 +4,11 @@ import Loading from "../Loading";
 import CategoryMinify from "../CategoryMinify";
 import CategoriesSearchForm from "../forms/search/CategoriesSearchForm";
 import { nanoid } from "@reduxjs/toolkit";
-import { createFilterQuery, createSortQuery } from "../../utils/createQueries";
+import {
+	createFilterQuery,
+	createPageQuery,
+	createSortQuery,
+} from "../../utils/createQueries";
 import RequireAuthComponents from "../wrappers/RequireAuthComponents";
 import ToggleButton from "../buttons/ToggleButton";
 import CategoryForm from "../forms/CategoryForm";
@@ -18,6 +22,9 @@ export default function CategoriesFeed({ onCategoryClick }) {
 
 	const [search, setSearch] = useState(``);
 	const [sort, setSort] = useState(`A->Z`);
+	const [page, setPage] = useState(1);
+
+	const [paginationData, setPaginationData] = useState({});
 
 	const handleShowAddForm = () => {
 		setShowAddForm(!showAddForm);
@@ -31,6 +38,7 @@ export default function CategoriesFeed({ onCategoryClick }) {
 	const handleSearch = async (values) => {
 		setSearch(values.search);
 		setSort(values.sort);
+		setPage(values.page);
 		setRefresh(nanoid());
 	};
 
@@ -41,9 +49,11 @@ export default function CategoriesFeed({ onCategoryClick }) {
 					params: {
 						filter: createFilterQuery({ search }),
 						sort: createSortQuery({ sort }),
+						page: createPageQuery({ page }),
 					},
 				});
 
+				setPaginationData(res.data.pagination);
 				setCategories(res.data.categories);
 			} catch (err) {
 				api.catcher(err, setErrMsg);
@@ -64,7 +74,10 @@ export default function CategoriesFeed({ onCategoryClick }) {
 				<br />
 			</RequireAuthComponents>
 			Categories: <br />
-			<CategoriesSearchForm onSubmit={handleSearch} />
+			<CategoriesSearchForm
+				paginationData={paginationData}
+				onSubmit={handleSearch}
+			/>
 			{(() => {
 				if (loading) return <Loading />;
 				if (errMsg) return <p>{errMsg}</p>;
